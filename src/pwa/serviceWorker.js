@@ -1,4 +1,4 @@
-const cacheName = "open-spelling-bee-1.4.3";
+const cacheName = "open-spelling-bee-1.4.4";
 
 const wordDataPathname = "/words/en";
 
@@ -130,12 +130,12 @@ async function handleWordDataRequest(requestURL) {
     return cachedResponse;
   }
 
-  let cachedWordDataCompressedResponse = await cache.match("/words/en.json.gz");
+  let cachedWordDataCompressedResponse = await cache.match("/words/daily.json.gz");
 
   if (!cachedWordDataCompressedResponse) {
-    cachedWordDataCompressedResponse = await fetch("/words/en.json.gz");
+    cachedWordDataCompressedResponse = await fetch("/words/daily.json.gz");
     await cache.put(
-      "/words/en.json.gz",
+      "/words/daily.json.gz",
       cachedWordDataCompressedResponse.clone()
     );
   }
