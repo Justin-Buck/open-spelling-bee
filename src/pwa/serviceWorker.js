@@ -1,4 +1,5 @@
-const cacheName = "open-spelling-bee-1.4.4";
+const cacheName = "open-spelling-bee-1.4.5";
+const IS_DEV = self.location.hostname === "localhost";
 
 const wordDataPathname = "/words/en";
 
@@ -86,6 +87,11 @@ self.addEventListener("fetch", (e) => {
 
   if (requestURL.pathname === wordDataPathname) {
     return e.respondWith(handleWordDataRequest(requestURL));
+  }
+
+  // On localhost, always get fresh files so changes show up right away
+  if (IS_DEV) {
+    return e.respondWith(fetch(e.request));
   }
 
   // Auto-cache all other requests

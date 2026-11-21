@@ -44,7 +44,7 @@
 
   .notification.invalid-guess {
     background-color: var(--yellow);
-    color: var(--black);
+    color: var(--text-on-yellow);
   }
 
   @keyframes shake {

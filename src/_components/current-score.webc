@@ -181,7 +181,7 @@
   .rank-dot.filled {
     width: 0.2rem;
     height: 0.2rem;
-    background-color: papayawhip;
+    background-color: #3a3200;
   }
 
   #score-modal ol {
