@@ -1,0 +1,18 @@
+<!-- Your Buzz coin balance, as a small pill. -->
+<span webc:root="override" x-data class="coin-balance">
+  <coin-icon width="18" height="18"></coin-icon>
+  <span x-text="$store.buzz.coins">0</span>
+</span>
+<style webc:scoped>
+  :host {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 1rem;
+    background: var(--surface);
+    color: var(--text);
+    font-weight: bold;
+    font-variant-numeric: tabular-nums;
+  }
+</style>

@@ -1,0 +1,25 @@
+<!--
+  Buzz, wearing whichever outfit is equipped. Use it anywhere:
+    <buzz-mascot></buzz-mascot>
+  Set his size from outside with a class or style, e.g. style="width: 8rem".
+
+  Note: Alpine's short ":src" can't be used in .webc files, because WebC
+  reads ":" attributes itself when the site is built. Use "x-bind:src".
+-->
+<img
+  webc:root="override"
+  x-data
+  x-bind:src="$store.buzz.equippedOutfit?.image"
+  x-bind:alt="`Buzz, wearing ${$store.buzz.equippedOutfit?.name}`"
+  src="/images/buzz/default.svg"
+  alt="Buzz"
+/>
+<style webc:scoped>
+  :host {
+    display: block;
+    width: 10rem;
+    height: auto;
+    aspect-ratio: 200 / 220;
+    object-fit: contain;
+  }
+</style>

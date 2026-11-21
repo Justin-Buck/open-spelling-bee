@@ -1,0 +1,68 @@
+[
+  {
+    "id": "default",
+    "name": "Classic Buzz",
+    "price": 0,
+    "image": "/images/buzz/default.svg"
+  },
+  {
+    "id": "outfit-1",
+    "name": "Outfit 1",
+    "price": 50,
+    "image": "/images/buzz/outfit-1.svg"
+  },
+  {
+    "id": "outfit-2",
+    "name": "Outfit 2",
+    "price": 50,
+    "image": "/images/buzz/outfit-2.svg"
+  },
+  {
+    "id": "outfit-3",
+    "name": "Outfit 3",
+    "price": 50,
+    "image": "/images/buzz/outfit-3.svg"
+  },
+  {
+    "id": "outfit-4",
+    "name": "Outfit 4",
+    "price": 50,
+    "image": "/images/buzz/outfit-4.svg"
+  },
+  {
+    "id": "outfit-5",
+    "name": "Outfit 5",
+    "price": 50,
+    "image": "/images/buzz/outfit-5.svg"
+  },
+  {
+    "id": "outfit-6",
+    "name": "Outfit 6",
+    "price": 50,
+    "image": "/images/buzz/outfit-6.svg"
+  },
+  {
+    "id": "outfit-7",
+    "name": "Outfit 7",
+    "price": 50,
+    "image": "/images/buzz/outfit-7.svg"
+  },
+  {
+    "id": "outfit-8",
+    "name": "Outfit 8",
+    "price": 50,
+    "image": "/images/buzz/outfit-8.svg"
+  },
+  {
+    "id": "outfit-9",
+    "name": "Outfit 9",
+    "price": 50,
+    "image": "/images/buzz/outfit-9.svg"
+  },
+  {
+    "id": "outfit-10",
+    "name": "Outfit 10",
+    "price": 50,
+    "image": "/images/buzz/outfit-10.svg"
+  }
+]

@@ -3,7 +3,7 @@
   Shared layout for every page of Buzz Buzz.
   A page picks it with `layout: base.webc` in its front matter, and sets:
     title: shown in the browser tab
-    tab:   which tab to highlight (home, daily, puzzles or pangramble)
+    tab:   which tab to highlight (home, daily, puzzles, pangramble or chambers)
   The page's own content is dropped in where @raw="content" is.
 -->
 <html lang="en">
@@ -46,7 +46,14 @@
       webc:keep
     />
 
-    <!-- AlpineJS (only pages that use Alpine add code to this bundle) -->
+    <!-- Buzz's outfits, from src/_data/outfits.json, for the wallet to read -->
+    <script
+      webc:keep
+      @raw="'window.BUZZ_OUTFITS = ' + JSON.stringify(outfits) + ';'"
+    ></script>
+    <script src="../js/buzz.mjs" webc:bucket="alpine"></script>
+
+    <!-- AlpineJS, with each page's own Alpine code -->
     <script
       :src="getBundleFileUrl('js', 'alpine')"
       type="module"

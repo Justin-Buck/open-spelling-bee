@@ -1,0 +1,168 @@
+---
+layout: base.webc
+title: Buzz's chambers
+tab: chambers
+---
+
+<main class="chambers">
+  <header class="chambers-header">
+    <h1>Buzz's chambers</h1>
+    <coin-balance></coin-balance>
+  </header>
+
+  <buzz-mascot class="chambers-buzz"></buzz-mascot>
+  <p class="wearing-label" x-data x-text="`Wearing: ${$store.buzz.equippedOutfit?.name}`"></p>
+
+  <!-- One card per outfit in src/_data/outfits.json, made when the site is built -->
+  <ul class="outfits">
+    <li
+      webc:for="outfit of outfits"
+      :x-data="`outfitCard('${outfit.id}', ${outfit.price})`"
+      x-bind:class="{ wearing: isWearing }"
+    >
+      <img :src="outfit.image" :alt="outfit.name" loading="lazy" />
+      <span class="outfit-name" @text="outfit.name"></span>
+      <button
+        type="button"
+        x-on:click="press()"
+        x-bind:class="{ unaffordable: !isOwned && !canAfford, confirming }"
+        x-text="label"
+      ></button>
+    </li>
+  </ul>
+</main>
+
+<script webc:bucket="alpine">
+  // What each outfit card's button says and does
+  Alpine.data("outfitCard", (id, price) => ({
+    id,
+    price,
+    confirming: false,
+
+    get isOwned() {
+      return this.$store.buzz.owns(this.id);
+    },
+    get isWearing() {
+      return this.$store.buzz.equipped === this.id;
+    },
+    get canAfford() {
+      return this.$store.buzz.canAfford(this.price);
+    },
+    get label() {
+      if (this.isWearing) return "Wearing";
+      if (this.isOwned) return "Wear";
+      if (this.confirming) return `Buy for ${this.price}?`;
+      if (this.canAfford) return `Buy · ${this.price}`;
+      return `Need ${this.price}`;
+    },
+
+    press() {
+      if (this.isWearing) return;
+      if (this.isOwned) {
+        this.$store.buzz.equip(this.id);
+        return;
+      }
+      if (!this.canAfford) return;
+
+      // First tap asks, second tap buys, so nobody buys by accident
+      if (!this.confirming) {
+        this.confirming = true;
+        setTimeout(() => (this.confirming = false), 3000);
+        return;
+      }
+      this.confirming = false;
+      this.$store.buzz.buy(this.id);
+    },
+  }));
+</script>
+
+<style>
+  .chambers {
+    max-width: 25rem;
+    margin: 0 auto;
+  }
+
+  .chambers-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .chambers-header h1 {
+    font-size: 1.6rem;
+    margin: 0.5rem 0;
+  }
+
+  .chambers-buzz {
+    width: 11rem;
+    margin: 1rem auto 0.25rem;
+  }
+
+  .wearing-label {
+    text-align: center;
+    color: var(--line);
+    margin: 0 0 1.5rem;
+  }
+
+  .outfits {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .outfits li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    background: var(--surface);
+    border: 2px solid transparent;
+  }
+
+  .outfits li.wearing {
+    border-color: var(--yellow);
+  }
+
+  .outfits img {
+    width: 100%;
+    max-width: 7rem;
+    aspect-ratio: 200 / 220;
+    object-fit: contain;
+  }
+
+  .outfit-name {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .outfits button {
+    width: 100%;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    background: var(--gradient);
+    color: var(--text-on-yellow);
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
+
+  .outfits li.wearing button {
+    background: none;
+    color: var(--yellow);
+  }
+
+  .outfits button.unaffordable {
+    background: var(--tile);
+    color: var(--line);
+  }
+
+  .outfits button.confirming {
+    background: var(--yellow);
+  }
+</style>

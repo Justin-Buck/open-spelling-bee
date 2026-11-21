@@ -29,6 +29,8 @@ module.exports = (eleventyConfig) => {
   // Pass through word files and manifest without any processing
   eleventyConfig.addPassthroughCopy({
     "src/words": "words",
+    // Buzz's outfit pictures
+    "src/images": "images",
   });
 
   eleventyConfig.addPassthroughCopy(

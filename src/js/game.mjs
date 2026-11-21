@@ -1,4 +1,5 @@
 const GENIUS_PERCENT_THRESHOLD = 0.7;
+const GENIUS_COIN_REWARD = 10;
 
 /**
  * @param {string} timestamp
@@ -175,7 +176,10 @@ Alpine.store("game", {
     for (let i = localStorage.length; i >= 0; --i) {
       const key = localStorage.key(i);
       if (
-        // Remove all entries that aren't for today or yesterday
+        // Only daily games are cleaned up. Their keys look like "20261021-v2".
+        // Everything else (Buzz's wallet, puzzle progress) is left alone.
+        /^\d+-v2$/.test(key) &&
+        // Remove daily games that aren't for today or yesterday
         key !== todayLocalStorageKey &&
         key !== yesterdayLocalStorageKey
       ) {
@@ -369,6 +373,10 @@ Alpine.store("game", {
     this.isGenius = newScore >= this.geniusScoreThreshold;
     this.isMaster = newScore === totalPossibleScore;
 
+    if (this.isGenius) {
+      this.payGeniusReward();
+    }
+
     for (let i = ranks.length - 1; i >= 0; --i) {
       const rank = ranks[i];
       if (
@@ -379,6 +387,21 @@ Alpine.store("game", {
         this.nextRank = ranks[i + 1];
         break;
       }
+    }
+  },
+  // Reaching Genius pays Buzz coins, once per daily puzzle
+  payGeniusReward() {
+    if (!this.timestamp) return;
+    const wasPaid = Alpine.store("buzz").earn(
+      GENIUS_COIN_REWARD,
+      `genius-${this.timestamp}`
+    );
+    if (wasPaid) {
+      this.showNotification({
+        class: "valid-guess gradient-bg",
+        message: `Genius! +${GENIUS_COIN_REWARD} Buzz coins`,
+        ariaLabel: `You reached Genius and earned ${GENIUS_COIN_REWARD} Buzz coins.`,
+      });
     }
   },
   submitGuess(guessWord) {

@@ -1,4 +1,4 @@
-const cacheName = "buzz-buzz-2.0.1";
+const cacheName = "buzz-buzz-2.1.0";
 const IS_DEV = self.location.hostname === "localhost";
 
 const wordDataPathname = "/words/en";
@@ -11,6 +11,7 @@ const PAGES = [
   "/daily/",
   "/puzzles/",
   "/pangramble/",
+  "/chambers/",
 ];
 
 async function precacheEverything() {
@@ -25,13 +26,14 @@ async function precacheEverything() {
   ]);
 
   // Each page links to its own bundled CSS and JS files, which have
-  // generated names like /bundle/UDFDD4Q07V.js. Read each saved page
-  // to find them, and save those too.
+  // generated names like /bundle/UDFDD4Q07V.js, and to pictures like
+  // /images/buzz/default.svg. Read each saved page to find them, and save
+  // those too. (Buzz's chambers shows every outfit, so this saves them all.)
   for (const page of PAGES) {
     const response = await cache.match(page);
     const html = await response.text();
     const bundleUrls = new Set(
-      [...html.matchAll(/"(\/bundle\/[^"]+)"/g)].map((match) => match[1])
+      [...html.matchAll(/"(\/(?:bundle|images)\/[^"]+)"/g)].map((match) => match[1])
     );
     await cache.addAll([...bundleUrls]);
   }

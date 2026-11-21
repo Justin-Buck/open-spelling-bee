@@ -5,6 +5,7 @@ tab: home
 ---
 
 <main class="home">
+  <buzz-mascot class="home-buzz"></buzz-mascot>
   <h1>Buzz Buzz</h1>
 
   <nav class="menu" aria-label="Main menu">
@@ -12,6 +13,7 @@ tab: home
     <a href="/daily/">Daily</a>
     <a href="/puzzles/">Puzzles</a>
     <a href="/pangramble/">Pangramble</a>
+    <a href="/chambers/">Buzz's chambers</a>
   </nav>
 </main>
 
@@ -19,13 +21,18 @@ tab: home
   .home {
     max-width: 25rem;
     margin: 0 auto;
-    padding-top: 3rem;
+    padding-top: 1.5rem;
+  }
+
+  .home-buzz {
+    width: 8rem;
+    margin: 0 auto 0.5rem;
   }
 
   .home h1 {
     font-size: 2.75rem;
     text-align: center;
-    margin: 0 0 2.5rem;
+    margin: 0 0 2rem;
     background-image: var(--gradient);
     -webkit-background-clip: text;
     background-clip: text;
