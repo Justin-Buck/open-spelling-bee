@@ -1,0 +1,17 @@
+---
+layout: base.webc
+title: Daily
+tab: daily
+---
+
+<loading-indicator x-show="false"></loading-indicator>
+<div x-cloak>
+  <page-header></page-header>
+  <page-main></page-main>
+</div>
+
+<script src="../js/game.mjs" webc:bucket="alpine"></script>
+<script src="../js/fireConfetti.mjs"></script>
+
+<!-- Non-critical JS (this page's bundle, which includes the confetti code above) -->
+<script :src="getBundleFileUrl('js')" type="module" webc:keep></script>

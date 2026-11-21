@@ -1,23 +1,41 @@
-const cacheName = "open-spelling-bee-1.4.5";
+const cacheName = "buzz-buzz-2.0.0";
 const IS_DEV = self.location.hostname === "localhost";
 
 const wordDataPathname = "/words/en";
+
+// Every page of the app. Each one is saved when the app installs,
+// so every tab works offline, even one you haven't opened yet.
+const PAGES = ["/", "/daily/", "/puzzles/", "/wager/"];
+
+async function precacheEverything() {
+  const cache = await caches.open(cacheName);
+
+  await cache.addAll([
+    ...PAGES,
+    "/words/daily.json.gz",
+    // 3rd party libraries
+    "https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/module.esm.js/+esm",
+    "https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js/+esm",
+  ]);
+
+  // Each page links to its own bundled CSS and JS files, which have
+  // generated names like /bundle/UDFDD4Q07V.js. Read each saved page
+  // to find them, and save those too.
+  for (const page of PAGES) {
+    const response = await cache.match(page);
+    const html = await response.text();
+    const bundleUrls = new Set(
+      [...html.matchAll(/"(\/bundle\/[^"]+)"/g)].map((match) => match[1])
+    );
+    await cache.addAll([...bundleUrls]);
+  }
+}
 
 self.addEventListener("install", (e) => {
   // The promise that skipWaiting() returns can be safely ignored.
   self.skipWaiting();
 
-  e.waitUntil(
-    caches.open(cacheName).then((cache) =>
-      cache.addAll([
-        "/",
-        "/index.html",
-        // 3rd party libraries
-        "https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/module.esm.js/+esm",
-        "https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js/+esm",
-      ])
-    )
-  );
+  e.waitUntil(precacheEverything());
 });
 
 /**

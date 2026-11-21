@@ -1,0 +1,29 @@
+---
+layout: base.webc
+title: Puzzles
+tab: puzzles
+---
+
+<main class="coming-soon">
+  <h1>Puzzles</h1>
+  <p>Find the hidden pangram in each puzzle to unlock the next one. Stuck? Peek at the picture clue.</p>
+  <p class="soon">Coming soon</p>
+</main>
+
+<style>
+  .coming-soon {
+    max-width: 25rem;
+    margin: 0 auto;
+    padding-top: 1rem;
+    line-height: 1.4;
+  }
+
+  .coming-soon .soon {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 1rem;
+    background: var(--surface);
+    color: var(--yellow);
+  }
+</style>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!--
+  Shared layout for every page of Buzz Buzz.
+  A page picks it with `layout: base.webc` in its front matter, and sets:
+    title: shown in the browser tab
+    tab:   which tab to highlight (home, daily, puzzles or wager)
+  The page's own content is dropped in where @raw="content" is.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="description" content="Buzz Buzz, a word game" />
+    <meta name="generator" :content="eleventy.generator" />
+    <title @html="title ? `${title} · Buzz Buzz` : 'Buzz Buzz'"></title>
+    <link rel="icon" type="image/png" href="/icon32x32.png" />
+
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Pre-connect to the jsdelivr cdn since we'll be loading a few 3rd party libraries from there -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+
+    <!-- Critical JS and CSS -->
+    <script @raw="getBundle('js', 'critical')" type="module" webc:keep></script>
+    <script webc:bucket="critical">
+      await navigator.serviceWorker.register("/sw.js");
+      if (!navigator.serviceWorker.controller) {
+        // Perform a hard reload to get the SW to take over.
+        window.location.reload();
+      }
+    </script>
+
+    <style @raw="getBundle('css', 'critical')" webc:keep></style>
+
+    <link rel="stylesheet" href="../styles/reset.css" webc:bucket="critical" />
+
+    <!-- Defer non-critical CSS -->
+    <link
+      rel="preload"
+      :href="getBundleFileUrl('css')"
+      as="style"
+      onload="this.onload=null;this.rel='stylesheet'"
+      webc:keep
+    />
+
+    <!-- AlpineJS (only pages that use Alpine add code to this bundle) -->
+    <script
+      :src="getBundleFileUrl('js', 'alpine')"
+      type="module"
+      webc:keep
+    ></script>
+  </head>
+  <body x-data>
+    <template @raw="content" webc:nokeep></template>
+
+    <tab-bar :@active="tab"></tab-bar>
+  </body>
+</html>

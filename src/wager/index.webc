@@ -1,0 +1,29 @@
+---
+layout: base.webc
+title: Wager
+tab: wager
+---
+
+<main class="coming-soon">
+  <h1>Wager</h1>
+  <p>Bet buzz coins, then race the clock to find the pangram. Win and double your coins.</p>
+  <p class="soon">Coming soon</p>
+</main>
+
+<style>
+  .coming-soon {
+    max-width: 25rem;
+    margin: 0 auto;
+    padding-top: 1rem;
+    line-height: 1.4;
+  }
+
+  .coming-soon .soon {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 1rem;
+    background: var(--surface);
+    color: var(--yellow);
+  }
+</style>

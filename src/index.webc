@@ -1,65 +1,114 @@
 ---
-meta:
-  title: "Open Spelling Bee"
-  description: "An open-source Spelling Bee game for the web"
+layout: base.webc
+title: ""
+tab: home
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" :content="meta.description" />
-    <meta name="generator" :content="eleventy.generator" />
-    <title @html="meta.title"></title>
-    <link rel="icon" type="image/png" href="/icon32x32.png" />
+<main class="home">
+  <h1>Buzz Buzz</h1>
+  <p class="tagline">Make words from seven letters. Pick a way to play.</p>
 
-    <link rel="manifest" href="/manifest.json" />
+  <a class="mode-card" href="/daily/">
+    <span class="mode-name">Daily</span>
+    <span class="mode-detail">A new puzzle every day. Climb the ranks to Genius.</span>
+  </a>
+  <a class="mode-card" href="/puzzles/">
+    <span class="mode-name">Puzzles</span>
+    <span class="mode-detail">Find the hidden pangram to unlock the next puzzle.</span>
+  </a>
+  <a class="mode-card" href="/wager/">
+    <span class="mode-name">Wager</span>
+    <span class="mode-detail">Bet buzz coins and race the clock to find the pangram.</span>
+  </a>
 
-    <!-- Pre-connect to the jsdelivr cdn since we'll be loading a few 3rd party libraries from there -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <section class="how-to-play">
+    <h2>How to play</h2>
+    <ul>
+      <li>Words must be at least 4 letters long.</li>
+      <li>Every word must use the center letter.</li>
+      <li>Letters can be used more than once.</li>
+      <li>4-letter words are worth 1 point. Longer words are worth 1 point per letter.</li>
+      <li>A <strong>pangram</strong> uses all 7 letters, and earns 7 bonus points.</li>
+    </ul>
+  </section>
 
-    <!-- Critical JS and CSS -->
-    <script @raw="getBundle('js', 'critical')" type="module" webc:keep></script>
-    <script webc:bucket="critical">
-      await navigator.serviceWorker.register("/sw.js");
-      if (!navigator.serviceWorker.controller) {
-        // Perform a hard reload to get the SW to take over.
-        window.location.reload();
-      }
-    </script>
+  <p class="credits">
+    Based on <a href="https://github.com/Gyanreyer/open-spelling-bee">Open Spelling Bee</a>
+    by Ryan Geyer, MIT license.
+  </p>
+</main>
 
-    <style @raw="getBundle('css', 'critical')" webc:keep></style>
+<style>
+  .home {
+    max-width: 25rem;
+    margin: 0 auto;
+    padding-top: 1rem;
+  }
 
-    <link rel="stylesheet" href="./styles/reset.css" webc:bucket="critical" />
+  .home h1 {
+    font-size: 2.25rem;
+    margin: 0 0 0.25rem;
+    background-image: var(--gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
 
-    <!-- Defer non-critical CSS -->
-    <link
-      rel="preload"
-      :href="getBundleFileUrl('css')"
-      as="style"
-      onload="this.onload=null;this.rel='stylesheet'"
-      webc:keep
-    />
+  .tagline {
+    color: var(--line);
+    margin: 0 0 1.5rem;
+    line-height: 1.4;
+  }
 
-    <!-- AlpineJS -->
-    <script
-      :src="getBundleFileUrl('js', 'alpine')"
-      type="module"
-      webc:keep
-    ></script>
-    <script src="./js/game.mjs" webc:bucket="alpine"></script>
-  </head>
-  <body x-data>
-    <loading-indicator x-show="false"></loading-indicator>
-    <div x-cloak>
-      <page-header></page-header>
-      <page-main></page-main>
-    </div>
+  .mode-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem 1.1rem;
+    margin-bottom: 0.75rem;
+    border-radius: 0.75rem;
+    background: var(--surface);
+    border-left: 4px solid var(--yellow);
+    color: var(--text);
+    text-decoration: none;
+  }
 
-    <!-- Non-critical JS -->
-    <script :src="getBundleFileUrl('js')" type="module" webc:keep></script>
+  .mode-card:active {
+    opacity: 0.8;
+  }
 
-    <script src="./js/fireConfetti.mjs"></script>
-  </body>
-</html>
+  .mode-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .mode-detail {
+    color: var(--line);
+    font-size: 0.9rem;
+    line-height: 1.35;
+  }
+
+  .how-to-play {
+    margin-top: 2rem;
+  }
+
+  .how-to-play h2 {
+    font-size: 1.1rem;
+  }
+
+  .how-to-play ul {
+    padding-left: 1.2rem;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .credits {
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: var(--line);
+  }
+
+  .credits a {
+    color: var(--line);
+  }
+</style>
