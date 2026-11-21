@@ -1,9 +1,14 @@
 // Splits the master word data into puzzle pools for each game mode.
 // Run from the project root:  node scripts/filter-puzzles.mjs
 //
-// Input:   src/words/en.json            (master list, never modified)
-// Outputs: src/words/daily.json(.gz)    Mode 1 - daily puzzles
-//          src/words/pangram-pool.json(.gz)  Modes 2 & 3 - pangram puzzles
+// Inputs:  src/words/en.json             (master list, never modified)
+//          scripts/puzzle-picks.json     (your hand-picked puzzle mode words)
+// Outputs: src/words/daily.json(.gz)     Mode 1 - daily puzzles
+//          src/words/puzzles.json        Mode 2 - the launch puzzles, in unlock order
+//          src/words/wager-pool.json(.gz) Mode 3 - every other pangram puzzle
+//
+// Holdout picks go into NO output file. They stay reserved in puzzle-picks.json
+// until you move them into "launch" for a future update.
 
 import fs from "node:fs";
 import zlib from "node:zlib";
@@ -125,7 +130,35 @@ for (const indices of dailyWordIndices) {
 }
 
 // ---------------------------------------------------------------------------
-// 7. Write the output files
+// 7. Split the pangram pool: puzzle mode picks vs. wager mode
+// ---------------------------------------------------------------------------
+const picks = JSON.parse(fs.readFileSync("scripts/puzzle-picks.json", "utf8"));
+const poolByPangram = new Map(pangramPool.map((p) => [p.pangram, p]));
+
+// Every pick must be in the pool, and no word may be picked twice
+const allPicks = [...picks.launch, ...picks.holdout];
+const seenPicks = new Set();
+for (const word of allPicks) {
+  if (!poolByPangram.has(word)) {
+    throw new Error(`"${word}" in puzzle-picks.json is not in the pangram pool`);
+  }
+  if (seenPicks.has(word)) {
+    throw new Error(`"${word}" is in puzzle-picks.json more than once`);
+  }
+  seenPicks.add(word);
+}
+
+// Mode 2: launch puzzles in unlock order (1 = first)
+const puzzleModePuzzles = picks.launch.map((word, i) => ({
+  order: i + 1,
+  ...poolByPangram.get(word),
+}));
+
+// Mode 3: everything that wasn't picked (launch OR holdout)
+const wagerPool = pangramPool.filter((p) => !seenPicks.has(p.pangram));
+
+// ---------------------------------------------------------------------------
+// 8. Write the output files
 // ---------------------------------------------------------------------------
 function writeJsonFiles(basePath, data) {
   const json = JSON.stringify(data);
@@ -135,9 +168,18 @@ function writeJsonFiles(basePath, data) {
 
 // Daily keeps the same format as en.json, so the service worker can read it as-is
 writeJsonFiles("src/words/daily", [allWords, dailyLetterSets, dailyWordIndices]);
-writeJsonFiles("src/words/pangram-pool", pangramPool);
+writeJsonFiles("src/words/wager-pool", wagerPool);
+
+// Puzzle mode is small, so it's saved readable (pretty-printed), without a .gz
+fs.writeFileSync(
+  "src/words/puzzles.json",
+  JSON.stringify(puzzleModePuzzles, null, 2) + "\n"
+);
 
 console.log(`Letter sets in master list: ${letterSets.length}`);
 console.log(`Letter groups:              ${groups.size}`);
 console.log(`Daily puzzles:              ${dailyLetterSets.length}`);
 console.log(`Pangram pool puzzles:       ${pangramPool.length}`);
+console.log(`  Puzzle mode (launch):     ${puzzleModePuzzles.length}`);
+console.log(`  Held out for later:       ${picks.holdout.length}`);
+console.log(`  Wager mode:               ${wagerPool.length}`);
