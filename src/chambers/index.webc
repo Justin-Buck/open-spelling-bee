@@ -17,10 +17,15 @@ tab: chambers
   <ul class="outfits">
     <li
       webc:for="outfit of outfits"
-      :x-data="`outfitCard('${outfit.id}', ${outfit.price})`"
+      :x-data="`outfitCard('${outfit.id}', ${outfit.price}, '${outfit.image}')`"
       x-bind:class="{ wearing: isWearing }"
     >
-      <img :src="outfit.image" :alt="outfit.name" loading="lazy" />
+      <!-- Outfits stay a mystery until you buy them -->
+      <img
+        src="/images/buzz/mystery.svg"
+        x-bind:src="isOwned ? image : '/images/buzz/mystery.svg'"
+        :alt="outfit.name"
+      />
       <span class="outfit-name" @text="outfit.name"></span>
       <button
         type="button"
@@ -34,9 +39,10 @@ tab: chambers
 
 <script webc:bucket="alpine">
   // What each outfit card's button says and does
-  Alpine.data("outfitCard", (id, price) => ({
+  Alpine.data("outfitCard", (id, price, image) => ({
     id,
     price,
+    image,
     confirming: false,
 
     get isOwned() {
