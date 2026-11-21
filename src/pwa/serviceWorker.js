@@ -1,11 +1,17 @@
-const cacheName = "buzz-buzz-2.0.0";
+const cacheName = "buzz-buzz-2.0.1";
 const IS_DEV = self.location.hostname === "localhost";
 
 const wordDataPathname = "/words/en";
 
 // Every page of the app. Each one is saved when the app installs,
 // so every tab works offline, even one you haven't opened yet.
-const PAGES = ["/", "/daily/", "/puzzles/", "/wager/"];
+const PAGES = [
+  "/",
+  "/what-is-this/",
+  "/daily/",
+  "/puzzles/",
+  "/pangramble/",
+];
 
 async function precacheEverything() {
   const cache = await caches.open(cacheName);

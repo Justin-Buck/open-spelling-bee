@@ -1,0 +1,78 @@
+---
+layout: base.webc
+title: What is this?
+tab: home
+---
+
+<main class="about">
+  <a class="back" href="/">‹ Home</a>
+  <h1>What is this?</h1>
+  <p>
+    Buzz Buzz is a word game. Each puzzle gives you seven letters, and you
+    make as many words from them as you can.
+  </p>
+
+  <h2>How to play</h2>
+  <ul>
+    <li>Words must be at least 4 letters long.</li>
+    <li>Every word must use the center letter.</li>
+    <li>Letters can be used more than once.</li>
+    <li>4-letter words are worth 1 point. Longer words are worth 1 point per letter.</li>
+    <li>A <strong>pangram</strong> uses all 7 letters, and earns 7 bonus points.</li>
+  </ul>
+
+  <h2>Ways to play</h2>
+  <ul>
+    <li><strong>Daily:</strong> a new puzzle every day. Climb the ranks to Genius.</li>
+    <li><strong>Puzzles:</strong> find the hidden pangram to unlock the next puzzle.</li>
+    <li><strong>Pangramble:</strong> bet buzz coins and race the clock to find the pangram.</li>
+  </ul>
+
+  <p class="credits">
+    Based on <a href="https://github.com/Gyanreyer/open-spelling-bee">Open Spelling Bee</a>
+    by Ryan Geyer, MIT license.
+  </p>
+</main>
+
+<style>
+  .about {
+    max-width: 25rem;
+    margin: 0 auto;
+    line-height: 1.45;
+  }
+
+  .about .back {
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: var(--line);
+    text-decoration: none;
+  }
+
+  .about h1 {
+    font-size: 1.8rem;
+    margin: 0 0 0.75rem;
+  }
+
+  .about h2 {
+    font-size: 1.1rem;
+    margin-top: 1.75rem;
+  }
+
+  .about ul {
+    padding-left: 1.2rem;
+  }
+
+  .about li {
+    margin-bottom: 0.35rem;
+  }
+
+  .credits {
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: var(--line);
+  }
+
+  .credits a {
+    color: var(--line);
+  }
+</style>

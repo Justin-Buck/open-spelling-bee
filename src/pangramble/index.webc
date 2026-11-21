@@ -1,11 +1,11 @@
 ---
 layout: base.webc
-title: Wager
-tab: wager
+title: Pangramble
+tab: pangramble
 ---
 
 <main class="coming-soon">
-  <h1>Wager</h1>
+  <h1>Pangramble</h1>
   <p>Bet buzz coins, then race the clock to find the pangram. Win and double your coins.</p>
   <p class="soon">Coming soon</p>
 </main>

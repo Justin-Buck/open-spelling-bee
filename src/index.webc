@@ -6,109 +6,52 @@ tab: home
 
 <main class="home">
   <h1>Buzz Buzz</h1>
-  <p class="tagline">Make words from seven letters. Pick a way to play.</p>
 
-  <a class="mode-card" href="/daily/">
-    <span class="mode-name">Daily</span>
-    <span class="mode-detail">A new puzzle every day. Climb the ranks to Genius.</span>
-  </a>
-  <a class="mode-card" href="/puzzles/">
-    <span class="mode-name">Puzzles</span>
-    <span class="mode-detail">Find the hidden pangram to unlock the next puzzle.</span>
-  </a>
-  <a class="mode-card" href="/wager/">
-    <span class="mode-name">Wager</span>
-    <span class="mode-detail">Bet buzz coins and race the clock to find the pangram.</span>
-  </a>
-
-  <section class="how-to-play">
-    <h2>How to play</h2>
-    <ul>
-      <li>Words must be at least 4 letters long.</li>
-      <li>Every word must use the center letter.</li>
-      <li>Letters can be used more than once.</li>
-      <li>4-letter words are worth 1 point. Longer words are worth 1 point per letter.</li>
-      <li>A <strong>pangram</strong> uses all 7 letters, and earns 7 bonus points.</li>
-    </ul>
-  </section>
-
-  <p class="credits">
-    Based on <a href="https://github.com/Gyanreyer/open-spelling-bee">Open Spelling Bee</a>
-    by Ryan Geyer, MIT license.
-  </p>
+  <nav class="menu" aria-label="Main menu">
+    <a href="/what-is-this/">What is this?</a>
+    <a href="/daily/">Daily</a>
+    <a href="/puzzles/">Puzzles</a>
+    <a href="/pangramble/">Pangramble</a>
+  </nav>
 </main>
 
 <style>
   .home {
     max-width: 25rem;
     margin: 0 auto;
-    padding-top: 1rem;
+    padding-top: 3rem;
   }
 
   .home h1 {
-    font-size: 2.25rem;
-    margin: 0 0 0.25rem;
+    font-size: 2.75rem;
+    text-align: center;
+    margin: 0 0 2.5rem;
     background-image: var(--gradient);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
-  .tagline {
-    color: var(--line);
-    margin: 0 0 1.5rem;
-    line-height: 1.4;
-  }
-
-  .mode-card {
+  .menu {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
-    padding: 1rem 1.1rem;
-    margin-bottom: 0.75rem;
+    gap: 0.75rem;
+  }
+
+  .menu a {
+    display: block;
+    padding: 1.1rem;
     border-radius: 0.75rem;
     background: var(--surface);
-    border-left: 4px solid var(--yellow);
     color: var(--text);
-    text-decoration: none;
-  }
-
-  .mode-card:active {
-    opacity: 0.8;
-  }
-
-  .mode-name {
     font-size: 1.2rem;
     font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .mode-detail {
-    color: var(--line);
-    font-size: 0.9rem;
-    line-height: 1.35;
-  }
-
-  .how-to-play {
-    margin-top: 2rem;
-  }
-
-  .how-to-play h2 {
-    font-size: 1.1rem;
-  }
-
-  .how-to-play ul {
-    padding-left: 1.2rem;
-    line-height: 1.5;
-    color: var(--text);
-  }
-
-  .credits {
-    margin-top: 2rem;
-    font-size: 0.8rem;
-    color: var(--line);
-  }
-
-  .credits a {
-    color: var(--line);
+  .menu a:active {
+    opacity: 0.8;
   }
 </style>

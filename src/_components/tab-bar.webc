@@ -1,6 +1,6 @@
 <!--
   The bar of tabs along the bottom of every page.
-  `active` says which tab to highlight: home, daily, puzzles or wager.
+  `active` says which tab to highlight: home, daily, puzzles or pangramble.
 -->
 <nav webc:root="override" aria-label="Game modes">
   <a
@@ -36,15 +36,15 @@
     Puzzles
   </a>
   <a
-    href="/wager/"
-    :class="active === 'wager' ? 'active' : ''"
-    :aria-current="active === 'wager' ? 'page' : false"
+    href="/pangramble/"
+    :class="active === 'pangramble' ? 'active' : ''"
+    :aria-current="active === 'pangramble' ? 'page' : false"
   >
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <circle cx="12" cy="12" r="9" />
       <path d="M14.5 9h-3.5a1.75 1.75 0 0 0 0 3.5h2a1.75 1.75 0 0 1 0 3.5H9.5M12 7v2M12 16v1.5" />
     </svg>
-    Wager
+    Pangramble
   </a>
 </nav>
 
