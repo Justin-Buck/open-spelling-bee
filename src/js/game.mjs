@@ -7,7 +7,21 @@ const GENIUS_COIN_REWARD = 10;
  */
 const getLocalStorageKey = (timestamp) => `${timestamp}-v2`;
 
+// The puzzle play page is /puzzles/play/?n=3. On any other page,
+// the game plays the daily puzzle.
+const getPuzzleNumberFromPage = () =>
+  location.pathname.startsWith("/puzzles/play")
+    ? Number(new URLSearchParams(location.search).get("n"))
+    : null;
+
 Alpine.store("game", {
+  // "daily", or "puzzle" on the puzzle play page
+  mode: "daily",
+  // In puzzle mode: { order, difficulty, reward, clue, pangram, letterSet, words }
+  puzzle: null,
+  // In puzzle mode: whether its pangram has been found, and the coins it paid
+  isPuzzleSolved: false,
+  puzzleCoinsEarned: 0,
   timestamp: null,
   centerLetter: "",
   outerLetters: new Array(6).fill(""),
@@ -280,10 +294,49 @@ Alpine.store("game", {
       guessedWordCount: prevGuessedWordSet.size,
     };
   },
+  // Loads puzzle number `order` from puzzles.json, in the same shape as the
+  // daily puzzle. Sends you back to the puzzle list if it's locked or missing.
+  async loadPuzzle(order) {
+    const puzzles = await fetch("/words/puzzles.json").then((res) =>
+      res.json()
+    );
+    const puzzle = puzzles.find((p) => p.order === order);
+
+    if (!puzzle || !Alpine.store("puzzleProgress").isUnlocked(order)) {
+      location.replace("/puzzles/");
+      return null;
+    }
+
+    this.mode = "puzzle";
+    this.puzzle = puzzle;
+    this.isPuzzleSolved = Alpine.store("puzzleProgress").isSolved(order);
+
+    // The capital letter in letterSet is the center letter, e.g. "ehLnopt"
+    const centerLetter = [...puzzle.letterSet]
+      .find((letter) => letter !== letter.toLowerCase())
+      .toLowerCase();
+    const outerLetters = [...puzzle.letterSet.toLowerCase()].filter(
+      (letter) => letter !== centerLetter
+    );
+
+    return {
+      // Saved guesses go under "puzzle-3-v2", apart from daily games
+      ts: `puzzle-${order}`,
+      centerLetter,
+      outerLetters,
+      validWords: puzzle.words,
+    };
+  },
   async init() {
-    const { ts, centerLetter, outerLetters, validWords } = await fetch(
-      "/words/en"
-    ).then((res) => res.json());
+    const puzzleNumber = getPuzzleNumberFromPage();
+    const gameData = puzzleNumber
+      ? await this.loadPuzzle(puzzleNumber)
+      : await fetch("/words/en").then((res) => res.json());
+
+    // A locked puzzle is on its way back to the puzzle list
+    if (!gameData) return;
+
+    const { ts, centerLetter, outerLetters, validWords } = gameData;
 
     this.timestamp = ts;
 
@@ -299,8 +352,11 @@ Alpine.store("game", {
       }
     });
 
-    await this.getPreviousGame();
-    this.cleanUpLocalStorage();
+    // Yesterday's answers and old-game cleanup are only for the daily game
+    if (this.mode === "daily") {
+      await this.getPreviousGame();
+      this.cleanUpLocalStorage();
+    }
   },
   validateWord(word) {
     if (word.length < 4) {
@@ -373,7 +429,8 @@ Alpine.store("game", {
     this.isGenius = newScore >= this.geniusScoreThreshold;
     this.isMaster = newScore === totalPossibleScore;
 
-    if (this.isGenius) {
+    // Only the daily game pays for Genius. Puzzles pay for the pangram.
+    if (this.isGenius && this.mode === "daily") {
       this.payGeniusReward();
     }
 
@@ -418,7 +475,10 @@ Alpine.store("game", {
 
       this.updateScore(this.currentScore + score);
 
-      if (isPanagram) {
+      if (isPanagram && this.mode === "puzzle") {
+        // Each puzzle has exactly one pangram, so finding it solves the puzzle
+        this.solvePuzzle();
+      } else if (isPanagram) {
         window.fireConfetti("panagram-confetti");
 
         this.showNotification({
@@ -440,6 +500,18 @@ Alpine.store("game", {
         ariaLabel: reason,
       });
     }
+  },
+  // Marks the puzzle solved, pays its coins (first solve only),
+  // and opens the "Puzzle solved" pop-up
+  solvePuzzle() {
+    const { order, reward } = this.puzzle;
+    const wasPaid = Alpine.store("buzz").earn(reward, `puzzle-${order}`);
+
+    Alpine.store("puzzleProgress").markSolved(order);
+    this.puzzleCoinsEarned = wasPaid ? reward : 0;
+    this.isPuzzleSolved = true;
+
+    window.dispatchEvent(new CustomEvent("puzzle-solved"));
   },
   shuffleOuterLetters() {
     for (let i = this.outerLetters.length - 1; i > 0; i--) {

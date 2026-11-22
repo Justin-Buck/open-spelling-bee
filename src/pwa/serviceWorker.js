@@ -1,4 +1,4 @@
-const cacheName = "buzz-buzz-2.1.1";
+const cacheName = "buzz-buzz-2.2.0";
 const IS_DEV = self.location.hostname === "localhost";
 
 const wordDataPathname = "/words/en";
@@ -10,6 +10,7 @@ const PAGES = [
   "/what-is-this/",
   "/daily/",
   "/puzzles/",
+  "/puzzles/play/",
   "/pangramble/",
   "/chambers/",
 ];
@@ -20,6 +21,7 @@ async function precacheEverything() {
   await cache.addAll([
     ...PAGES,
     "/words/daily.json.gz",
+    "/words/puzzles.json",
     // 3rd party libraries
     "https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/module.esm.js/+esm",
     "https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js/+esm",
@@ -38,6 +40,11 @@ async function precacheEverything() {
     );
     await cache.addAll([...bundleUrls]);
   }
+
+  // Save every puzzle's picture clue too
+  const puzzles = await (await cache.match("/words/puzzles.json")).json();
+  const clueUrls = puzzles.map((puzzle) => puzzle.clue).filter(Boolean);
+  await cache.addAll(clueUrls);
 }
 
 self.addEventListener("install", (e) => {
@@ -123,17 +130,19 @@ self.addEventListener("fetch", (e) => {
 
   // Auto-cache all other requests
   e.respondWith(
-    caches.open(cacheName).then((cache) =>
-      cache.match(e.request).then((cachedResponse) => {
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-        return fetch(e.request).then((response) => {
-          cache.put(e.request, response.clone());
-          return response;
-        });
-      })
-    )
+    caches.open(cacheName).then(async (cache) => {
+      // A page is saved once, whatever comes after its "?": the saved
+      // /puzzles/play/ page also serves /puzzles/play/?n=3
+      const cachedResponse = await cache.match(e.request, {
+        ignoreSearch: e.request.mode === "navigate",
+      });
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+      const response = await fetch(e.request);
+      cache.put(e.request, response.clone());
+      return response;
+    })
   );
 });
 

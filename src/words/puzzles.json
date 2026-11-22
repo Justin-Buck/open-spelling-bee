@@ -1,6 +1,9 @@
 [
   {
     "order": 1,
+    "difficulty": "Very easy",
+    "reward": 5,
+    "clue": null,
     "pangram": "telephone",
     "letterSet": "ehLnopt",
     "words": [
@@ -58,6 +61,9 @@
   },
   {
     "order": 2,
+    "difficulty": "Very easy",
+    "reward": 5,
+    "clue": null,
     "pangram": "invisible",
     "letterSet": "Beilnsv",
     "words": [
@@ -113,6 +119,9 @@
   },
   {
     "order": 3,
+    "difficulty": "Very easy",
+    "reward": 5,
+    "clue": null,
     "pangram": "laundry",
     "letterSet": "Adlnruy",
     "words": [
@@ -166,6 +175,9 @@
   },
   {
     "order": 4,
+    "difficulty": "Easy",
+    "reward": 5,
+    "clue": null,
     "pangram": "vegetable",
     "letterSet": "aBegltv",
     "words": [
@@ -214,6 +226,9 @@
   },
   {
     "order": 5,
+    "difficulty": "Easy",
+    "reward": 5,
+    "clue": null,
     "pangram": "carnival",
     "letterSet": "acIlnrv",
     "words": [
@@ -267,6 +282,9 @@
   },
   {
     "order": 6,
+    "difficulty": "Easy",
+    "reward": 5,
+    "clue": null,
     "pangram": "balcony",
     "letterSet": "abClnoy",
     "words": [
@@ -316,6 +334,9 @@
   },
   {
     "order": 7,
+    "difficulty": "Easy",
+    "reward": 5,
+    "clue": null,
     "pangram": "alphabet",
     "letterSet": "abehlPt",
     "words": [
@@ -373,6 +394,9 @@
   },
   {
     "order": 8,
+    "difficulty": "Easy",
+    "reward": 5,
+    "clue": null,
     "pangram": "haircut",
     "letterSet": "Achirtu",
     "words": [
@@ -427,6 +451,9 @@
   },
   {
     "order": 9,
+    "difficulty": "Easy",
+    "reward": 5,
+    "clue": null,
     "pangram": "avalanche",
     "letterSet": "acehlNv",
     "words": [
@@ -471,6 +498,9 @@
   },
   {
     "order": 10,
+    "difficulty": "Easy",
+    "reward": 5,
+    "clue": null,
     "pangram": "spinach",
     "letterSet": "aChinps",
     "words": [
@@ -525,6 +555,9 @@
   },
   {
     "order": 11,
+    "difficulty": "Easy",
+    "reward": 5,
+    "clue": null,
     "pangram": "cupcakes",
     "letterSet": "aceKpsu",
     "words": [
@@ -579,6 +612,9 @@
   },
   {
     "order": 12,
+    "difficulty": "Medium",
+    "reward": 10,
+    "clue": null,
     "pangram": "mischief",
     "letterSet": "Cefhims",
     "words": [
@@ -621,6 +657,9 @@
   },
   {
     "order": 13,
+    "difficulty": "Medium",
+    "reward": 10,
+    "clue": null,
     "pangram": "bonfire",
     "letterSet": "befiNor",
     "words": [
@@ -675,6 +714,9 @@
   },
   {
     "order": 14,
+    "difficulty": "Medium",
+    "reward": 10,
+    "clue": null,
     "pangram": "pendulum",
     "letterSet": "delMnpu",
     "words": [
@@ -724,6 +766,9 @@
   },
   {
     "order": 15,
+    "difficulty": "Medium",
+    "reward": 10,
+    "clue": null,
     "pangram": "pumpkins",
     "letterSet": "ikmNpsu",
     "words": [
@@ -779,6 +824,9 @@
   },
   {
     "order": 16,
+    "difficulty": "Medium",
+    "reward": 10,
+    "clue": null,
     "pangram": "vertigo",
     "letterSet": "eGiortv",
     "words": [
@@ -828,6 +876,9 @@
   },
   {
     "order": 17,
+    "difficulty": "Medium",
+    "reward": 10,
+    "clue": null,
     "pangram": "kangaroos",
     "letterSet": "aGknors",
     "words": [
@@ -884,6 +935,9 @@
   },
   {
     "order": 18,
+    "difficulty": "Medium",
+    "reward": 10,
+    "clue": null,
     "pangram": "trombone",
     "letterSet": "Bemnort",
     "words": [
@@ -940,6 +994,9 @@
   },
   {
     "order": 19,
+    "difficulty": "Medium",
+    "reward": 10,
+    "clue": null,
     "pangram": "firework",
     "letterSet": "Efikorw",
     "words": [
@@ -993,6 +1050,9 @@
   },
   {
     "order": 20,
+    "difficulty": "Medium",
+    "reward": 10,
+    "clue": null,
     "pangram": "burritos",
     "letterSet": "bIorstu",
     "words": [
@@ -1045,6 +1105,9 @@
   },
   {
     "order": 21,
+    "difficulty": "Hard",
+    "reward": 15,
+    "clue": null,
     "pangram": "daffodils",
     "letterSet": "adFilos",
     "words": [
@@ -1100,6 +1163,9 @@
   },
   {
     "order": 22,
+    "difficulty": "Hard",
+    "reward": 15,
+    "clue": null,
     "pangram": "hydrant",
     "letterSet": "Adhnrty",
     "words": [
@@ -1157,6 +1223,9 @@
   },
   {
     "order": 23,
+    "difficulty": "Hard",
+    "reward": 15,
+    "clue": null,
     "pangram": "icebergs",
     "letterSet": "Bcegirs",
     "words": [
@@ -1213,6 +1282,9 @@
   },
   {
     "order": 24,
+    "difficulty": "Hard",
+    "reward": 15,
+    "clue": null,
     "pangram": "hammocks",
     "letterSet": "achKmos",
     "words": [
@@ -1266,6 +1338,9 @@
   },
   {
     "order": 25,
+    "difficulty": "Hard",
+    "reward": 15,
+    "clue": null,
     "pangram": "piglets",
     "letterSet": "eGilpst",
     "words": [
@@ -1311,6 +1386,9 @@
   },
   {
     "order": 26,
+    "difficulty": "Hard",
+    "reward": 15,
+    "clue": null,
     "pangram": "haywire",
     "letterSet": "aEhirwy",
     "words": [
@@ -1365,6 +1443,9 @@
   },
   {
     "order": 27,
+    "difficulty": "Hard",
+    "reward": 15,
+    "clue": null,
     "pangram": "figment",
     "letterSet": "efGimnt",
     "words": [
@@ -1417,6 +1498,9 @@
   },
   {
     "order": 28,
+    "difficulty": "Hard",
+    "reward": 15,
+    "clue": null,
     "pangram": "warthog",
     "letterSet": "aghoRtw",
     "words": [
@@ -1468,6 +1552,9 @@
   },
   {
     "order": 29,
+    "difficulty": "Hard",
+    "reward": 15,
+    "clue": null,
     "pangram": "honeydew",
     "letterSet": "dehnOwy",
     "words": [
@@ -1517,6 +1604,9 @@
   },
   {
     "order": 30,
+    "difficulty": "Hard",
+    "reward": 15,
+    "clue": null,
     "pangram": "loincloth",
     "letterSet": "chilNot",
     "words": [

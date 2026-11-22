@@ -3,6 +3,7 @@
 //
 // Inputs:  src/words/en.json             (master list, never modified)
 //          scripts/puzzle-picks.json     (your hand-picked puzzle mode words)
+//          src/images/clues/             (picture clues, named after each pangram)
 // Outputs: src/words/daily.json(.gz)     Mode 1 - daily puzzles
 //          src/words/puzzles.json        Mode 2 - the launch puzzles, in unlock order
 //          src/words/wager-pool.json(.gz) Mode 3 - every other pangram puzzle
@@ -136,7 +137,8 @@ const picks = JSON.parse(fs.readFileSync("scripts/puzzle-picks.json", "utf8"));
 const poolByPangram = new Map(pangramPool.map((p) => [p.pangram, p]));
 
 // Every pick must be in the pool, and no word may be picked twice
-const allPicks = [...picks.launch, ...picks.holdout];
+// Each launch pick is { word, difficulty, reward }; holdout picks are just words
+const allPicks = [...picks.launch.map((pick) => pick.word), ...picks.holdout];
 const seenPicks = new Set();
 for (const word of allPicks) {
   if (!poolByPangram.has(word)) {
@@ -148,11 +150,32 @@ for (const word of allPicks) {
   seenPicks.add(word);
 }
 
+// A picture clue for a puzzle is an image in src/images/clues/ named after
+// its pangram, e.g. src/images/clues/telephone.png. Puzzles with no picture
+// yet get clue: null, and the game says the clue is still being painted.
+const CLUE_EXTENSIONS = ["png", "jpg", "jpeg", "webp", "svg"];
+function findClueImage(word) {
+  for (const extension of CLUE_EXTENSIONS) {
+    if (fs.existsSync(`src/images/clues/${word}.${extension}`)) {
+      return `/images/clues/${word}.${extension}`;
+    }
+  }
+  return null;
+}
+
 // Mode 2: launch puzzles in unlock order (1 = first)
-const puzzleModePuzzles = picks.launch.map((word, i) => ({
-  order: i + 1,
-  ...poolByPangram.get(word),
-}));
+const puzzleModePuzzles = picks.launch.map((pick, i) => {
+  if (typeof pick.reward !== "number") {
+    throw new Error(`"${pick.word}" in puzzle-picks.json needs a reward number`);
+  }
+  return {
+    order: i + 1,
+    difficulty: pick.difficulty,
+    reward: pick.reward,
+    clue: findClueImage(pick.word),
+    ...poolByPangram.get(pick.word),
+  };
+});
 
 // Mode 3: everything that wasn't picked (launch OR holdout)
 const wagerPool = pangramPool.filter((p) => !seenPicks.has(p.pangram));
@@ -181,5 +204,8 @@ console.log(`Letter groups:              ${groups.size}`);
 console.log(`Daily puzzles:              ${dailyLetterSets.length}`);
 console.log(`Pangram pool puzzles:       ${pangramPool.length}`);
 console.log(`  Puzzle mode (launch):     ${puzzleModePuzzles.length}`);
+console.log(
+  `    with a picture clue:    ${puzzleModePuzzles.filter((p) => p.clue).length}`
+);
 console.log(`  Held out for later:       ${picks.holdout.length}`);
 console.log(`  Wager mode:               ${wagerPool.length}`);

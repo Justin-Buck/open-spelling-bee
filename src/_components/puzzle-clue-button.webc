@@ -1,0 +1,62 @@
+<!--
+  The picture clue for the puzzle being played: a button that opens it in a
+  pop-up. Peeking is saved, so Puzzles can show which ones you solved
+  without the clue.
+-->
+<div webc:root="override" x-data="puzzleClue">
+  <button type="button" class="clue-button" x-on:click="open()">
+    Picture clue
+  </button>
+  <modal x-ref="cluemodal" id="clue-modal">
+    <h2>Picture clue</h2>
+    <template x-if="$store.game.puzzle?.clue">
+      <img
+        class="clue-image"
+        x-bind:src="$store.game.puzzle.clue"
+        alt="A picture hinting at this puzzle's pangram"
+      />
+    </template>
+    <template x-if="!$store.game.puzzle?.clue">
+      <div class="clue-missing">
+        <buzz-mascot></buzz-mascot>
+        <p>Buzz is still painting this clue. Check back soon!</p>
+      </div>
+    </template>
+  </modal>
+</div>
+<script webc:bucket="alpine">
+  Alpine.data("puzzleClue", () => ({
+    open() {
+      const { order, clue } = this.$store.game.puzzle;
+      if (clue) {
+        this.$store.puzzleProgress.markClueUsed(order);
+      }
+      this.$refs.cluemodal.showModal();
+    },
+  }));
+</script>
+<style webc:scoped>
+  .clue-button {
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    background: none;
+    color: var(--text);
+    font-size: 0.9rem;
+  }
+
+  .clue-image {
+    display: block;
+    width: 100%;
+    border-radius: 0.5rem;
+  }
+
+  .clue-missing {
+    text-align: center;
+  }
+
+  .clue-missing img {
+    width: 6rem;
+    margin: 0 auto;
+  }
+</style>

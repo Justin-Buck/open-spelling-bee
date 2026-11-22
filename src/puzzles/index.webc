@@ -4,26 +4,172 @@ title: Puzzles
 tab: puzzles
 ---
 
-<main class="coming-soon">
-  <h1>Puzzles</h1>
-  <p>Find the hidden pangram in each puzzle to unlock the next one. Stuck? Peek at the picture clue.</p>
-  <p class="soon">Coming soon</p>
+<main class="puzzles" x-data="puzzleList">
+  <header class="puzzles-header">
+    <h1>Puzzles</h1>
+    <coin-balance></coin-balance>
+  </header>
+
+  <p class="progress" x-text="`${solvedCount} of ${total} solved`"></p>
+
+  <a
+    class="play-next"
+    x-show="nextPuzzle"
+    x-bind:href="`/puzzles/play/?n=${nextPuzzle}`"
+    x-text="`Play puzzle ${nextPuzzle}`"
+  ></a>
+  <p class="all-done" x-show="!nextPuzzle">
+    You solved them all! More puzzles are on the way.
+  </p>
+
+  <!-- One tile per puzzle, made from src/words/puzzles.json when the site is built -->
+  <ol class="puzzle-grid">
+    <li
+      webc:for="puzzle of puzzleList"
+      :x-data="`puzzleTile(${puzzle.order})`"
+    >
+      <a
+        :href="`/puzzles/play/?n=${puzzle.order}`"
+        x-bind:class="state"
+        x-bind:aria-disabled="state === 'locked'"
+        x-on:click="if (state === 'locked') $event.preventDefault()"
+        :aria-label="`Puzzle ${puzzle.order}, ${puzzle.difficulty}, ${puzzle.reward} coins`"
+      >
+        <span class="tile-number" @text="puzzle.order"></span>
+        <span class="tile-status" x-text="statusText"></span>
+      </a>
+      <span class="tile-reward" @text="`+${puzzle.reward}`"></span>
+    </li>
+  </ol>
 </main>
 
+<script webc:bucket="alpine">
+  Alpine.data("puzzleList", () => ({
+    total: document.querySelectorAll(".puzzle-grid li").length,
+    get solvedCount() {
+      return this.$store.puzzleProgress.solved.length;
+    },
+    // The first puzzle that's open but not solved yet
+    get nextPuzzle() {
+      for (let order = 1; order <= this.total; order++) {
+        if (!this.$store.puzzleProgress.isSolved(order)) return order;
+      }
+      return null;
+    },
+  }));
+
+  Alpine.data("puzzleTile", (order) => ({
+    get state() {
+      const progress = this.$store.puzzleProgress;
+      if (progress.isSolved(order)) return "solved";
+      if (progress.isUnlocked(order)) return "open";
+      return "locked";
+    },
+    get statusText() {
+      return { solved: "✓", open: "", locked: "🔒" }[this.state];
+    },
+  }));
+</script>
+
 <style>
-  .coming-soon {
+  .puzzles {
     max-width: 25rem;
     margin: 0 auto;
-    padding-top: 1rem;
-    line-height: 1.4;
   }
 
-  .coming-soon .soon {
-    display: inline-block;
-    margin-top: 1rem;
-    padding: 0.4rem 0.9rem;
-    border-radius: 1rem;
+  .puzzles-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .puzzles-header h1 {
+    font-size: 1.6rem;
+    margin: 0.5rem 0;
+  }
+
+  .progress {
+    color: var(--line);
+    margin: 0.25rem 0 1rem;
+  }
+
+  .play-next {
+    display: block;
+    padding: 0.9rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0.75rem;
+    background: var(--gradient);
+    color: var(--text-on-yellow);
+    font-size: 1.15rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .all-done {
+    margin-bottom: 1.5rem;
+  }
+
+  .puzzle-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.9rem 0.5rem;
+  }
+
+  .puzzle-grid li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .puzzle-grid a {
+    position: relative;
+    width: 100%;
+    max-width: 4rem;
+    aspect-ratio: 1 / 1.1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    background: var(--tile);
+    color: var(--text);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .tile-number {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .tile-status {
+    font-size: 0.7rem;
+    line-height: 1;
+  }
+
+  .puzzle-grid a.solved {
+    background: var(--gradient);
+    color: var(--text-on-yellow);
+  }
+
+  .puzzle-grid a.open {
+    background: var(--yellow);
+    color: var(--text-on-yellow);
+  }
+
+  .puzzle-grid a.locked {
     background: var(--surface);
-    color: var(--yellow);
+    color: var(--line);
+  }
+
+  .tile-reward {
+    font-size: 0.75rem;
+    color: var(--line);
   }
 </style>

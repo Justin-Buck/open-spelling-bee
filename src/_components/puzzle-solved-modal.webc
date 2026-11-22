@@ -1,0 +1,103 @@
+<!-- The pop-up when you find a puzzle's pangram -->
+<template webc:nokeep webc:root="override">
+  <modal id="puzzle-solved-modal" x-data="puzzleSolvedModal">
+    <buzz-mascot class="solved-buzz"></buzz-mascot>
+    <h2 x-text="`Puzzle ${$store.game.puzzle?.order} solved!`"></h2>
+    <p>
+      The pangram was
+      <strong
+        class="solved-pangram"
+        x-text="$store.game.puzzle?.pangram.toUpperCase()"
+      ></strong>
+    </p>
+    <p class="solved-coins" x-show="$store.game.puzzleCoinsEarned > 0">
+      <coin-icon width="20" height="20"></coin-icon>
+      <span x-text="`+${$store.game.puzzleCoinsEarned} Buzz coins`"></span>
+    </p>
+    <div class="solved-actions">
+      <a
+        class="solved-next"
+        x-show="hasNextPuzzle"
+        x-bind:href="`/puzzles/play/?n=${$store.game.puzzle?.order + 1}`"
+        >Next puzzle</a
+      >
+      <a class="solved-all" href="/puzzles/">All puzzles</a>
+    </div>
+    <canvas id="puzzle-confetti" class="confetti"></canvas>
+  </modal>
+</template>
+<script webc:bucket="alpine">
+  Alpine.data("puzzleSolvedModal", () => ({
+    hasNextPuzzle: false,
+    init() {
+      window.addEventListener("puzzle-solved", async () => {
+        const puzzles = await fetch("/words/puzzles.json").then((res) =>
+          res.json()
+        );
+        this.hasNextPuzzle = puzzles.some(
+          (p) => p.order === this.$store.game.puzzle.order + 1
+        );
+        this.$el.showModal();
+        window.fireConfetti("puzzle-confetti");
+      });
+    },
+  }));
+</script>
+<style>
+  #puzzle-solved-modal .modal-contents {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    text-align: center;
+  }
+
+  #puzzle-solved-modal .solved-buzz {
+    width: 7rem;
+    margin: 0 auto;
+  }
+
+  .solved-pangram {
+    letter-spacing: 0.08em;
+  }
+
+  .solved-coins {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    font-weight: bold;
+  }
+
+  .solved-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+  }
+
+  .solved-actions a {
+    display: block;
+    padding: 0.75rem;
+    border-radius: 0.6rem;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .solved-next {
+    background: var(--gradient);
+    color: var(--text-on-yellow);
+  }
+
+  .solved-all {
+    background: var(--tile);
+    color: var(--text);
+  }
+
+  #puzzle-confetti {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+</style>

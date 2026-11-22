@@ -52,6 +52,7 @@
       @raw="'window.BUZZ_OUTFITS = ' + JSON.stringify(outfits) + ';'"
     ></script>
     <script src="../js/buzz.mjs" webc:bucket="alpine"></script>
+    <script src="../js/puzzle-progress.mjs" webc:bucket="alpine"></script>
 
     <!-- AlpineJS, with each page's own Alpine code -->
     <script

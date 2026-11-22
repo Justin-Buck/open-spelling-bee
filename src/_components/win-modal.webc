@@ -28,7 +28,8 @@
     init() {
       const onCurrentRankUpdated = () => {
         // Open the win modal when the user reaches genius or master rank
-        if (this.$store.game.isGenius) {
+        // (daily game only: puzzles have their own "solved" pop-up)
+        if (this.$store.game.isGenius && this.$store.game.mode === "daily") {
           this.showModal();
         }
       };

@@ -1,0 +1,85 @@
+---
+layout: base.webc
+title: Puzzle
+tab: puzzles
+---
+
+<!--
+  Plays one puzzle: /puzzles/play/?n=3 plays puzzle 3.
+  game.mjs sees this address and loads that puzzle instead of the daily one.
+-->
+<loading-indicator x-show="false"></loading-indicator>
+<div x-cloak>
+  <div class="puzzle-bar" x-data>
+    <a class="puzzle-back" href="/puzzles/">‹ Puzzles</a>
+    <div class="puzzle-title">
+      <strong x-text="`Puzzle ${$store.game.puzzle?.order ?? ''}`"></strong>
+      <span
+        class="puzzle-difficulty"
+        x-text="$store.game.puzzle?.difficulty"
+      ></span>
+    </div>
+    <puzzle-clue-button></puzzle-clue-button>
+  </div>
+  <p class="puzzle-goal" x-data x-show="!$store.game.isPuzzleSolved">
+    Find the pangram to solve this puzzle.
+  </p>
+  <p class="puzzle-goal solved" x-data x-show="$store.game.isPuzzleSolved">
+    Solved! Keep finding words, or try the
+    <a href="/puzzles/">next puzzle</a>.
+  </p>
+  <page-header></page-header>
+  <page-main></page-main>
+  <puzzle-solved-modal></puzzle-solved-modal>
+</div>
+
+<script src="../js/game.mjs" webc:bucket="alpine"></script>
+<script src="../js/fireConfetti.mjs"></script>
+
+<!-- Non-critical JS (this page's bundle, which includes the confetti code above) -->
+<script :src="getBundleFileUrl('js')" type="module" webc:keep></script>
+
+<style>
+  .puzzle-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    max-width: 25rem;
+    margin: 0 auto 0.75rem;
+  }
+
+  .puzzle-back {
+    color: var(--line);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .puzzle-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.2;
+  }
+
+  .puzzle-difficulty {
+    font-size: 0.75rem;
+    color: var(--line);
+  }
+
+  .puzzle-goal {
+    max-width: 25rem;
+    margin: 0 auto 0.75rem;
+    text-align: center;
+    color: var(--line);
+    font-size: 0.9rem;
+  }
+
+  .puzzle-goal.solved {
+    color: var(--yellow);
+  }
+
+  .puzzle-goal.solved a {
+    color: var(--yellow);
+  }
+</style>
