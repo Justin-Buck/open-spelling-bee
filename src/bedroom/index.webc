@@ -1,16 +1,16 @@
 ---
 layout: base.webc
-title: Buzz's chambers
-tab: chambers
+title: Buzz's Bedroom
+tab: bedroom
 ---
 
-<main class="chambers">
-  <header class="chambers-header">
-    <h1>Buzz's chambers</h1>
+<main class="bedroom">
+  <header class="bedroom-header">
+    <h1>Buzz's Bedroom</h1>
     <coin-balance></coin-balance>
   </header>
 
-  <buzz-mascot class="chambers-buzz"></buzz-mascot>
+  <buzz-mascot class="bedroom-buzz"></buzz-mascot>
   <p class="wearing-label" x-data x-text="`Wearing: ${$store.buzz.equippedOutfit?.name}`"></p>
 
   <!-- One card per outfit in src/_data/outfits.json, made when the site is built -->
@@ -83,24 +83,24 @@ tab: chambers
 </script>
 
 <style>
-  .chambers {
+  .bedroom {
     max-width: 25rem;
     margin: 0 auto;
   }
 
-  .chambers-header {
+  .bedroom-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
   }
 
-  .chambers-header h1 {
+  .bedroom-header h1 {
     font-size: 1.6rem;
     margin: 0.5rem 0;
   }
 
-  .chambers-buzz {
+  .bedroom-buzz {
     width: 11rem;
     margin: 1rem auto 0.25rem;
   }

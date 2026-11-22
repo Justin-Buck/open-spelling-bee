@@ -1,4 +1,4 @@
-const cacheName = "buzz-buzz-2.7.2";
+const cacheName = "buzz-buzz-2.8.0";
 const IS_DEV = self.location.hostname === "localhost";
 
 const wordDataPathname = "/words/en";
@@ -13,7 +13,7 @@ const PAGES = [
   "/puzzles/play/",
   "/pangramble/",
   "/pangramble/play/",
-  "/chambers/",
+  "/bedroom/",
 ];
 
 async function precacheEverything() {
@@ -40,13 +40,25 @@ async function precacheEverything() {
     const bundleUrls = new Set(
       [...html.matchAll(/"(\/(?:bundle|images)\/[^"]+)"/g)].map((match) => match[1])
     );
-    await cache.addAll([...bundleUrls]);
+    await addEachToCache(cache, [...bundleUrls]);
   }
 
   // Save every puzzle's picture clue too
   const puzzles = await (await cache.match("/words/puzzles.json")).json();
   const clueUrls = puzzles.map((puzzle) => puzzle.clue).filter(Boolean);
-  await cache.addAll(clueUrls);
+  await addEachToCache(cache, clueUrls);
+}
+
+// Saves each file on its own, so one missing picture (say, a typo in
+// outfits.json) doesn't stop the whole app from installing or updating.
+// Missing files are listed in the browser console.
+async function addEachToCache(cache, urls) {
+  const results = await Promise.allSettled(urls.map((url) => cache.add(url)));
+  results.forEach((result, i) => {
+    if (result.status === "rejected") {
+      console.warn(`Buzz Buzz couldn't save ${urls[i]} for offline use`);
+    }
+  });
 }
 
 self.addEventListener("install", (e) => {

@@ -3,7 +3,7 @@
   Shared layout for every page of Buzz Buzz.
   A page picks it with `layout: base.webc` in its front matter, and sets:
     title: shown in the browser tab
-    tab:   which tab to highlight (home, daily, puzzles, pangramble or chambers)
+    tab:   which tab to highlight (home, daily, puzzles, pangramble or bedroom)
   The page's own content is dropped in where @raw="content" is.
 -->
 <html lang="en">
