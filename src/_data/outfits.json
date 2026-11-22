@@ -6,10 +6,10 @@
     "image": "/images/buzz/default.png"
   },
   {
-    "id": "outfit-1",
-    "name": "Outfit 1",
+    "id": "Joe-Cool",
+    "name": "Joe Cool",
     "price": 50,
-    "image": "/images/buzz/outfit-1.svg"
+    "image": "/images/buzz/joe-cool.png"
   },
   {
     "id": "outfit-2",
