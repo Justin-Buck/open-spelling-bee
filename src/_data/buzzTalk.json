@@ -3,10 +3,14 @@
   "lastButton": "Let's play!",
   "lastLink": "/",
   "bubbles": [
-    "PLACEHOLDER 1: Hi! I'm Buzz. Welcome to my hive.",
-    "PLACEHOLDER 2: Each puzzle gives you seven letters. Make as many words as you can, at least 4 letters long, and always use the center letter.",
-    "PLACEHOLDER 3: A <strong>pangram</strong> uses all seven letters. Finding one is the best feeling in the hive!",
-    "PLACEHOLDER 4: Play the <strong>Daily</strong> puzzle, unlock <strong>Puzzles</strong>, or race the clock in <strong>Pangramble</strong>.",
-    "PLACEHOLDER 5: Earn Buzz bucks as you play, then spend them on new outfits for me in my chambers!"
+    "Hi! I'm Buzz. I love spelling bee but I got tired of high all the high scores and bad subway wifi so I made my own version.",
+    "Each daily puzzle has a max score of 120 and <emph>never</emph> needs an internet connection.",
+    "But then I started thinking... and realized I really just want to get pangrams and maybe some hints sometimes what's wrong with that?",
+    "So I made a <strong>Puzzle</strong> mode where you can solve harder and harder pangrams and get hints in the form of Justin's drawings.",
+    "But then I started thinking, I should really be compensated for my work.",
+    "So now you can earn <strong>Buzz Bucks</strong> for solving puzzles and use them to buy me new outfits!",
+    "But then I started thinking, man this would be more fun with gambling...",
+    "So I made a <strong>Pangramble</strong> mode where you can wager your Buzz Bucks on whether you can solve a pangram quickly.",
+    "So that's all you need to know. Happy Birthday Sharon and have fun buzzing!"
   ]
 }
