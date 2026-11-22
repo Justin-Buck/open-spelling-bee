@@ -30,15 +30,15 @@
     "image": "/images/buzz/buzzdog.png"
   },
   {
-    "id": "outfit-5",
-    "name": "Outfit 5",
-    "price": 50,
-    "image": "/images/buzz/outfit-5.svg"
+    "id": "buzz-first-edition",
+    "name": "Buzz First Edition",
+    "price": 100,
+    "image": "/images/buzz/buzz-first-edition.png"
   },
   {
-    "id": "outfit-6",
-    "name": "Outfit 6",
-    "price": 50,
-    "image": "/images/buzz/outfit-6.svg"
+    "id": "joe-cool-first-edition",
+    "name": "Joe Cool First Edition",
+    "price": 100,
+    "image": "/images/buzz/joe-cool-first-edition.png"
   }
 ]
