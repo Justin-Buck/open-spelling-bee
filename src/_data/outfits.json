@@ -40,29 +40,5 @@
     "name": "Outfit 6",
     "price": 50,
     "image": "/images/buzz/outfit-6.svg"
-  },
-  {
-    "id": "outfit-7",
-    "name": "Outfit 7",
-    "price": 50,
-    "image": "/images/buzz/outfit-7.svg"
-  },
-  {
-    "id": "outfit-8",
-    "name": "Outfit 8",
-    "price": 50,
-    "image": "/images/buzz/outfit-8.svg"
-  },
-  {
-    "id": "outfit-9",
-    "name": "Outfit 9",
-    "price": 50,
-    "image": "/images/buzz/outfit-9.svg"
-  },
-  {
-    "id": "outfit-10",
-    "name": "Outfit 10",
-    "price": 50,
-    "image": "/images/buzz/outfit-10.svg"
   }
 ]

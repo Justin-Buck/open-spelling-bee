@@ -34,6 +34,12 @@ tab: bedroom
         x-text="label"
       ></button>
     </li>
+    <!-- A teaser for future outfits. Delete this <li> to hide it. -->
+    <li class="coming-soon-card">
+      <img src="/images/buzz/mystery.png" alt="" />
+      <span class="outfit-name">Coming soon!</span>
+      <span class="coming-soon-label">New outfits on the way</span>
+    </li>
   </ul>
 </main>
 
@@ -129,6 +135,21 @@ tab: bedroom
     border-radius: 0.75rem;
     background: var(--surface);
     border: 2px solid transparent;
+  }
+
+  .coming-soon-card {
+    border: 2px dashed var(--tile) !important;
+  }
+
+  .coming-soon-card img {
+    opacity: 0.5;
+  }
+
+  .coming-soon-label {
+    padding: 0.5rem 0;
+    font-size: 0.85rem;
+    color: var(--line);
+    text-align: center;
   }
 
   .outfits li.wearing {
