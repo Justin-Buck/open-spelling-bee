@@ -8,8 +8,11 @@
 
 const WALLET_KEY = "buzz-wallet";
 
+// New players start with a few Buzz bucks, enough to try Pangramble
+const STARTING_BUCKS = 20;
+
 const DEFAULT_WALLET = {
-  coins: 0,
+  coins: STARTING_BUCKS,
   owned: ["default"],
   equipped: "default",
   // Rewards already paid out, so none can be earned twice.
