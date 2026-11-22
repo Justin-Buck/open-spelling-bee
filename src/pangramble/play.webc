@@ -1,0 +1,51 @@
+---
+layout: base.webc
+title: Pangramble
+tab: pangramble
+---
+
+<!--
+  Plays the Pangramble round that was started on /pangramble/.
+  game.mjs sees this address and loads that round's letters.
+-->
+<loading-indicator x-show="false"></loading-indicator>
+<div x-cloak>
+  <div class="pangramble-bar">
+    <a class="pangramble-back" href="/pangramble/">‹ Pangramble</a>
+    <coin-balance></coin-balance>
+  </div>
+  <pangramble-timer></pangramble-timer>
+  <p class="pangramble-goal">Find the pangram before time runs out!</p>
+  <page-header></page-header>
+  <page-main></page-main>
+  <pangramble-result-modal></pangramble-result-modal>
+</div>
+
+<script src="../js/game.mjs" webc:bucket="alpine"></script>
+<script src="../js/fireConfetti.mjs"></script>
+
+<!-- Non-critical JS (this page's bundle, which includes the confetti code above) -->
+<script :src="getBundleFileUrl('js')" type="module" webc:keep></script>
+
+<style>
+  .pangramble-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 25rem;
+    margin: 0 auto 0.5rem;
+  }
+
+  .pangramble-back {
+    color: var(--line);
+    text-decoration: none;
+  }
+
+  .pangramble-goal {
+    max-width: 25rem;
+    margin: 0 auto 0.75rem;
+    text-align: center;
+    color: var(--line);
+    font-size: 0.9rem;
+  }
+</style>

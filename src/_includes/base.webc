@@ -53,6 +53,7 @@
     ></script>
     <script src="../js/buzz.mjs" webc:bucket="alpine"></script>
     <script src="../js/puzzle-progress.mjs" webc:bucket="alpine"></script>
+    <script src="../js/pangramble.mjs" webc:bucket="alpine"></script>
 
     <!-- AlpineJS, with each page's own Alpine code -->
     <script

@@ -1,4 +1,4 @@
-const cacheName = "buzz-buzz-2.2.0";
+const cacheName = "buzz-buzz-2.3.0";
 const IS_DEV = self.location.hostname === "localhost";
 
 const wordDataPathname = "/words/en";
@@ -12,6 +12,7 @@ const PAGES = [
   "/puzzles/",
   "/puzzles/play/",
   "/pangramble/",
+  "/pangramble/play/",
   "/chambers/",
 ];
 
@@ -22,6 +23,7 @@ async function precacheEverything() {
     ...PAGES,
     "/words/daily.json.gz",
     "/words/puzzles.json",
+    "/words/wager-pool.json.gz",
     // 3rd party libraries
     "https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/module.esm.js/+esm",
     "https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js/+esm",

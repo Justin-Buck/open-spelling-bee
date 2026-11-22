@@ -1,0 +1,105 @@
+<!-- The pop-up when a Pangramble round ends, won or lost -->
+<template webc:nokeep webc:root="override">
+  <modal id="pangramble-result-modal" x-data="pangrambleResult">
+    <buzz-mascot class="result-buzz"></buzz-mascot>
+    <h2 x-text="won ? 'You found it!' : 'Time\'s up!'"></h2>
+    <p>
+      The pangram was
+      <strong
+        class="result-pangram"
+        x-text="$store.pangramble.round?.pangram.toUpperCase()"
+      ></strong>
+    </p>
+    <p class="result-coins">
+      <coin-icon width="20" height="20"></coin-icon>
+      <span
+        x-text="won
+          ? `+${$store.pangramble.round?.payout} Buzz coins`
+          : `-${$store.pangramble.entryFee} Buzz coins`"
+      ></span>
+    </p>
+    <div class="result-actions">
+      <a class="result-again" href="/pangramble/">Play again</a>
+      <a class="result-home" href="/">Home</a>
+    </div>
+    <canvas id="pangramble-confetti" class="confetti"></canvas>
+  </modal>
+</template>
+<script webc:bucket="alpine">
+  Alpine.data("pangrambleResult", () => ({
+    get won() {
+      return this.$store.pangramble.round?.result === "won";
+    },
+    init() {
+      const show = () => {
+        this.$el.showModal();
+        if (this.won) window.fireConfetti("pangramble-confetti");
+      };
+      window.addEventListener("pangramble-ended", show);
+
+      // Opened the page after the round already ended (e.g. a reload)
+      const result = this.$store.pangramble.round?.result;
+      if (result === "won" || result === "lost") {
+        this.$nextTick(() => this.$el.showModal());
+      }
+    },
+  }));
+</script>
+<style>
+  #pangramble-result-modal .modal-contents {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    text-align: center;
+  }
+
+  #pangramble-result-modal .result-buzz {
+    width: 7rem;
+    margin: 0 auto;
+  }
+
+  .result-pangram {
+    letter-spacing: 0.08em;
+  }
+
+  .result-coins {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    font-weight: bold;
+  }
+
+  .result-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 1.25rem;
+  }
+
+  .result-actions a {
+    display: block;
+    padding: 0.75rem;
+    border-radius: 0.6rem;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .result-again {
+    background: var(--gradient);
+    color: var(--text-on-yellow);
+  }
+
+  .result-home {
+    background: var(--tile);
+    color: var(--text);
+  }
+
+  #pangramble-confetti {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+</style>

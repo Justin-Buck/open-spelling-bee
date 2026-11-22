@@ -4,26 +4,185 @@ title: Pangramble
 tab: pangramble
 ---
 
-<main class="coming-soon">
-  <h1>Pangramble</h1>
-  <p>Bet buzz coins, then race the clock to find the pangram. Win and double your coins.</p>
-  <p class="soon">Coming soon</p>
+<main class="pangramble" x-data="pangrambleSetup">
+  <header class="pangramble-header">
+    <h1>Pangramble</h1>
+    <coin-balance></coin-balance>
+  </header>
+
+  <buzz-mascot class="pangramble-buzz"></buzz-mascot>
+
+  <!-- A round is still going: go back to it -->
+  <div x-show="$store.pangramble.isPlaying" class="pangramble-panel">
+    <p>You have a round in progress, and the clock is still running!</p>
+    <a class="start-button" href="/pangramble/play/">Back to your round</a>
+  </div>
+
+  <!-- Not enough coins to play -->
+  <div
+    x-show="!$store.pangramble.isPlaying && !canAfford"
+    class="pangramble-panel"
+  >
+    <p>
+      You need <strong x-text="`${$store.pangramble.entryFee} Buzz coins`"></strong>
+      to play. Earn coins by reaching Genius in Daily, or by solving Puzzles.
+    </p>
+    <div class="earn-links">
+      <a href="/daily/">Daily</a>
+      <a href="/puzzles/">Puzzles</a>
+    </div>
+  </div>
+
+  <!-- Pick your time, then pay and play -->
+  <div x-show="!$store.pangramble.isPlaying && canAfford">
+    <p class="pangramble-rules">
+      <span x-text="$store.pangramble.entryFee"></span> coins to play. Find the
+      pangram before time runs out. Less time pays more.
+    </p>
+
+    <div class="time-options" role="radiogroup" aria-label="Time on the clock">
+      <template x-for="option in $store.pangramble.timeOptions" x-bind:key="option.seconds">
+        <button
+          type="button"
+          role="radio"
+          x-bind:aria-checked="chosenSeconds === option.seconds"
+          x-bind:class="{ chosen: chosenSeconds === option.seconds }"
+          x-on:click="chosenSeconds = option.seconds"
+        >
+          <span class="option-time" x-text="`${option.seconds}s`"></span>
+          <span class="option-multiplier" x-text="`${option.multiplier}×`"></span>
+          <span class="option-payout" x-text="`Win ${option.payout}`"></span>
+        </button>
+      </template>
+    </div>
+
+    <button
+      type="button"
+      class="start-button"
+      x-bind:disabled="!chosenSeconds || $store.pangramble.isStarting"
+      x-on:click="startRound()"
+      x-text="chosenSeconds
+        ? `Pay ${$store.pangramble.entryFee} coins and start`
+        : 'Pick your time'"
+    ></button>
+  </div>
 </main>
 
+<script webc:bucket="alpine">
+  Alpine.data("pangrambleSetup", () => ({
+    chosenSeconds: null,
+    get canAfford() {
+      return this.$store.buzz.canAfford(this.$store.pangramble.entryFee);
+    },
+    async startRound() {
+      const started = await this.$store.pangramble.start(this.chosenSeconds);
+      if (started) {
+        location.href = "/pangramble/play/";
+      }
+    },
+  }));
+</script>
+
 <style>
-  .coming-soon {
+  .pangramble {
     max-width: 25rem;
     margin: 0 auto;
-    padding-top: 1rem;
-    line-height: 1.4;
   }
 
-  .coming-soon .soon {
-    display: inline-block;
-    margin-top: 1rem;
-    padding: 0.4rem 0.9rem;
-    border-radius: 1rem;
+  .pangramble-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .pangramble-header h1 {
+    font-size: 1.6rem;
+    margin: 0.5rem 0;
+  }
+
+  .pangramble-buzz {
+    width: 8rem;
+    margin: 0.75rem auto 1rem;
+  }
+
+  .pangramble-rules,
+  .pangramble-panel p {
+    text-align: center;
+    line-height: 1.45;
+    margin: 0 0 1.25rem;
+  }
+
+  .time-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .time-options button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.9rem 0.25rem;
+    border: 2px solid transparent;
+    border-radius: 0.75rem;
     background: var(--surface);
+    color: var(--text);
+  }
+
+  .time-options button.chosen {
+    border-color: var(--yellow);
+  }
+
+  .option-time {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .option-multiplier {
     color: var(--yellow);
+    font-weight: bold;
+  }
+
+  .option-payout {
+    font-size: 0.8rem;
+    color: var(--line);
+  }
+
+  .start-button {
+    display: block;
+    width: 100%;
+    padding: 0.9rem;
+    border: none;
+    border-radius: 0.75rem;
+    background: var(--gradient);
+    color: var(--text-on-yellow);
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .start-button:disabled {
+    background: var(--tile);
+    color: var(--line);
+  }
+
+  .earn-links {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .earn-links a {
+    flex: 1;
+    padding: 0.8rem;
+    border-radius: 0.75rem;
+    background: var(--surface);
+    color: var(--text);
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
   }
 </style>

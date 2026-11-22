@@ -8,14 +8,27 @@ const GENIUS_COIN_REWARD = 10;
 const getLocalStorageKey = (timestamp) => `${timestamp}-v2`;
 
 // The puzzle play page is /puzzles/play/?n=3. On any other page,
-// the game plays the daily puzzle.
+// the game plays the daily puzzle (or Pangramble's round, below).
 const getPuzzleNumberFromPage = () =>
   location.pathname.startsWith("/puzzles/play")
     ? Number(new URLSearchParams(location.search).get("n"))
     : null;
 
+const isPangramblePage = () => location.pathname.startsWith("/pangramble/play");
+
+// Turns a letter set like "ehLnopt" (capital = center letter) into letters
+const splitLetterSet = (letterSet) => {
+  const centerLetter = [...letterSet]
+    .find((letter) => letter !== letter.toLowerCase())
+    .toLowerCase();
+  const outerLetters = [...letterSet.toLowerCase()].filter(
+    (letter) => letter !== centerLetter
+  );
+  return { centerLetter, outerLetters };
+};
+
 Alpine.store("game", {
-  // "daily", or "puzzle" on the puzzle play page
+  // "daily", "puzzle" on the puzzle play page, or "pangramble"
   mode: "daily",
   // In puzzle mode: { order, difficulty, reward, clue, pangram, letterSet, words }
   puzzle: null,
@@ -311,13 +324,7 @@ Alpine.store("game", {
     this.puzzle = puzzle;
     this.isPuzzleSolved = Alpine.store("puzzleProgress").isSolved(order);
 
-    // The capital letter in letterSet is the center letter, e.g. "ehLnopt"
-    const centerLetter = [...puzzle.letterSet]
-      .find((letter) => letter !== letter.toLowerCase())
-      .toLowerCase();
-    const outerLetters = [...puzzle.letterSet.toLowerCase()].filter(
-      (letter) => letter !== centerLetter
-    );
+    const { centerLetter, outerLetters } = splitLetterSet(puzzle.letterSet);
 
     return {
       // Saved guesses go under "puzzle-3-v2", apart from daily games
@@ -327,13 +334,42 @@ Alpine.store("game", {
       validWords: puzzle.words,
     };
   },
-  async init() {
-    const puzzleNumber = getPuzzleNumberFromPage();
-    const gameData = puzzleNumber
-      ? await this.loadPuzzle(puzzleNumber)
-      : await fetch("/words/en").then((res) => res.json());
+  // Loads Pangramble's current round. With no round, goes back to
+  // the Pangramble page to start one.
+  loadPangrambleRound() {
+    const round = Alpine.store("pangramble").round;
+    if (!round) {
+      location.replace("/pangramble/");
+      return null;
+    }
 
-    // A locked puzzle is on its way back to the puzzle list
+    this.mode = "pangramble";
+    const { centerLetter, outerLetters } = splitLetterSet(round.letterSet);
+
+    return {
+      ts: `pangramble-${round.id}`,
+      centerLetter,
+      outerLetters,
+      validWords: round.words,
+    };
+  },
+  async init() {
+    // Alpine runs this as soon as the game store is created, which can be
+    // before the other stores (pangramble, puzzleProgress) exist. Waiting
+    // one tick lets them all get created first.
+    await Promise.resolve();
+
+    const puzzleNumber = getPuzzleNumberFromPage();
+    let gameData;
+    if (puzzleNumber) {
+      gameData = await this.loadPuzzle(puzzleNumber);
+    } else if (isPangramblePage()) {
+      gameData = this.loadPangrambleRound();
+    } else {
+      gameData = await fetch("/words/en").then((res) => res.json());
+    }
+
+    // A locked puzzle or a missing round is on its way to another page
     if (!gameData) return;
 
     const { ts, centerLetter, outerLetters, validWords } = gameData;
@@ -466,6 +502,15 @@ Alpine.store("game", {
 
     const sanitizedWord = guessWord.toLowerCase();
 
+    // In Pangramble, guesses only count while the clock is running
+    if (this.mode === "pangramble") {
+      const pangramble = Alpine.store("pangramble");
+      if (pangramble.isPlaying && pangramble.timeLeft() === 0) {
+        pangramble.lose();
+      }
+      if (!pangramble.isPlaying) return;
+    }
+
     const { isValid, reason, score, isPanagram } =
       this.validateWord(sanitizedWord);
 
@@ -478,6 +523,9 @@ Alpine.store("game", {
       if (isPanagram && this.mode === "puzzle") {
         // Each puzzle has exactly one pangram, so finding it solves the puzzle
         this.solvePuzzle();
+      } else if (isPanagram && this.mode === "pangramble") {
+        // Found the round's one pangram in time
+        Alpine.store("pangramble").win();
       } else if (isPanagram) {
         window.fireConfetti("panagram-confetti");
 

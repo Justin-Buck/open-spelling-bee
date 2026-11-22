@@ -1,0 +1,84 @@
+<!--
+  Pangramble's countdown. It works out the time left from the round's
+  deadline, so it stays right after a reload. At zero, the round is lost.
+-->
+<div webc:root="override" class="pangramble-timer" x-data="pangrambleTimer">
+  <div class="timer-numbers">
+    <span class="timer-seconds" x-text="secondsLeft"></span>
+    <span class="timer-payout" x-text="`Win ${$store.pangramble.round?.payout ?? ''}`"></span>
+  </div>
+  <div class="timer-track">
+    <div
+      class="timer-fill"
+      x-bind:class="{ urgent: secondsLeft <= 5 }"
+      x-bind:style="`width: ${percentLeft}%`"
+    ></div>
+  </div>
+</div>
+<script webc:bucket="alpine">
+  Alpine.data("pangrambleTimer", () => ({
+    msLeft: 0,
+    init() {
+      this.tick();
+      const interval = setInterval(() => {
+        this.tick();
+        if (!this.$store.pangramble.isPlaying) clearInterval(interval);
+      }, 100);
+    },
+    tick() {
+      const pangramble = this.$store.pangramble;
+      this.msLeft = pangramble.timeLeft();
+      if (pangramble.isPlaying && this.msLeft === 0) {
+        pangramble.lose();
+      }
+    },
+    get secondsLeft() {
+      return Math.ceil(this.msLeft / 1000);
+    },
+    get percentLeft() {
+      const total = (this.$store.pangramble.round?.seconds ?? 1) * 1000;
+      return (this.msLeft / total) * 100;
+    },
+  }));
+</script>
+<style webc:scoped>
+  :host {
+    max-width: 25rem;
+    margin: 0 auto 0.75rem;
+  }
+
+  .timer-numbers {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+  }
+
+  .timer-seconds {
+    font-size: 2rem;
+    font-weight: bold;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .timer-payout {
+    color: var(--yellow);
+    font-weight: bold;
+  }
+
+  .timer-track {
+    height: 0.5rem;
+    border-radius: 0.25rem;
+    background: var(--tile);
+    overflow: hidden;
+  }
+
+  .timer-fill {
+    height: 100%;
+    background: var(--gradient);
+    transition: width 0.1s linear;
+  }
+
+  .timer-fill.urgent {
+    background: #ff5a4f;
+  }
+</style>
