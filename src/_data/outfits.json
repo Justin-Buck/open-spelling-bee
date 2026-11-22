@@ -12,22 +12,22 @@
     "image": "/images/buzz/joe-cool.png"
   },
   {
-    "id": "outfit-2",
-    "name": "Outfit 2",
+    "id": "buzz-beard",
+    "name": "Buzzbeard",
     "price": 50,
-    "image": "/images/buzz/outfit-2.svg"
+    "image": "/images/buzz/buzzbeard.png"
   },
   {
-    "id": "outfit-3",
-    "name": "Outfit 3",
+    "id": "buzzie-donuts",
+    "name": "Buzzie Donuts",
     "price": 50,
-    "image": "/images/buzz/outfit-3.svg"
+    "image": "/images/buzz/buzzie-donuts.png"
   },
   {
-    "id": "outfit-4",
-    "name": "Outfit 4",
+    "id": "buzz-dog",
+    "name": "Buzz Dog",
     "price": 50,
-    "image": "/images/buzz/outfit-4.svg"
+    "image": "/images/buzz/buzz-dog.png"
   },
   {
     "id": "outfit-5",
