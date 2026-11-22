@@ -38,7 +38,14 @@ tab: puzzles
         <span class="tile-number" @text="puzzle.order"></span>
         <span class="tile-status" x-text="statusText"></span>
       </a>
-      <span class="tile-reward" @text="`+${puzzle.reward}`"></span>
+      <!-- One coin per level: Level 1 = 1 coin, Level 3 = 3 coins -->
+      <span class="tile-reward">
+        <coin-icon
+          webc:for="coin of Array.from({ length: parseInt(puzzle.difficulty.replace(/\D/g, '')) || 1 })"
+          width="12"
+          height="12"
+        ></coin-icon>
+      </span>
     </li>
   </ol>
 </main>
@@ -169,7 +176,8 @@ tab: puzzles
   }
 
   .tile-reward {
-    font-size: 0.75rem;
-    color: var(--line);
+    display: flex;
+    gap: 1px;
+    height: 12px;
   }
 </style>

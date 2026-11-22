@@ -31,6 +31,13 @@ Alpine.store("buzz", {
   ...loadWallet(),
 
   init() {
+    // Ask the browser to keep the app's saved data (Buzz bucks, outfits,
+    // progress) even when the phone runs low on space. Installed apps are
+    // usually allowed without asking the player anything.
+    navigator.storage?.persisted?.().then((isPersisted) => {
+      if (!isPersisted) navigator.storage.persist?.();
+    });
+
     // Another tab or page may have changed the wallet: reload it when
     // this page comes back into view.
     window.addEventListener("visibilitychange", () => {
