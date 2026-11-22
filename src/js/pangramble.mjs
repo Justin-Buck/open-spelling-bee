@@ -5,9 +5,15 @@
 // stop the clock or give the coins back: the deadline is a fixed time.
 
 const ROUND_KEY = "buzz-pangramble-round";
-const SEEN_KEY = "buzz-pangramble-seen";
+const HISTORY_KEY = "buzz-pangramble-history";
+// The old list of every pangram seen, from before losses could come back
+const OLD_SEEN_KEY = "buzz-pangramble-seen";
 
 const ENTRY_FEE = 5;
+
+// A pangram you missed can come up again, but only after this many more
+// rounds, so you don't get an easy win from an answer you just saw
+const LOSS_COOLDOWN_ROUNDS = 100;
 
 // Each choice: seconds on the clock, and what a win pays back
 const TIME_OPTIONS = [
@@ -22,6 +28,52 @@ function loadJson(key, fallback) {
   } catch (e) {
     return fallback;
   }
+}
+
+// Which pangrams you've played: { roundsPlayed, won: [pangram, ...],
+// lostAtRound: { pangram: round number when you missed it } }
+function loadHistory() {
+  const history = loadJson(HISTORY_KEY, null) ?? {
+    roundsPlayed: 0,
+    won: [],
+    lostAtRound: {},
+  };
+  localStorage.removeItem(OLD_SEEN_KEY);
+  return history;
+}
+
+function saveHistory(history) {
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+}
+
+// Picks a pangram you can play now:
+// - never one you've already found (until you've found them all)
+// - not one you missed in the last LOSS_COOLDOWN_ROUNDS rounds
+function pickPuzzle(pool, history) {
+  const won = new Set(history.won);
+  const isCoolingDown = (pangram) =>
+    pangram in history.lostAtRound &&
+    history.roundsPlayed - history.lostAtRound[pangram] < LOSS_COOLDOWN_ROUNDS;
+
+  let choices = pool.filter((p) => !won.has(p.pangram) && !isCoolingDown(p.pangram));
+
+  if (choices.length === 0) {
+    const notWon = pool.filter((p) => !won.has(p.pangram));
+    if (notWon.length === 0) {
+      // You've found every pangram: start the whole pool over
+      history.won = [];
+      history.lostAtRound = {};
+      choices = pool;
+    } else {
+      // Only recent misses are left: use the one you missed longest ago
+      notWon.sort(
+        (a, b) => history.lostAtRound[a.pangram] - history.lostAtRound[b.pangram]
+      );
+      choices = [notWon[0]];
+    }
+  }
+
+  return choices[Math.floor(Math.random() * choices.length)];
 }
 
 // Reads the gzipped wager pool: [{ pangram, letterSet, words }, ...]
@@ -43,11 +95,20 @@ Alpine.store("pangramble", {
   isStarting: false,
 
   init() {
+    this.endIfTimeRanOut();
     window.addEventListener("visibilitychange", () => {
       if (document.visibilityState === "visible") {
         this.round = loadJson(ROUND_KEY, null);
+        this.endIfTimeRanOut();
       }
     });
+  },
+
+  // A round whose clock ran out while the app was closed is a loss
+  endIfTimeRanOut() {
+    if (this.isPlaying && this.timeLeft() === 0) {
+      this.lose();
+    }
   },
 
   save() {
@@ -64,7 +125,7 @@ Alpine.store("pangramble", {
     return Math.max(0, this.round.deadline - Date.now());
   },
 
-  // Pays the entry fee, picks a puzzle you haven't seen, and starts the clock.
+  // Pays the entry fee, picks a puzzle you can play, and starts the clock.
   // Returns false if you can't afford it.
   async start(seconds) {
     const option = this.timeOptions.find((o) => o.seconds === seconds);
@@ -76,16 +137,10 @@ Alpine.store("pangramble", {
     try {
       const pool = await loadWagerPool();
 
-      // Pick a puzzle you haven't played. Once you've seen them all, start over.
-      let seen = new Set(loadJson(SEEN_KEY, []));
-      let unseen = pool.filter((p) => !seen.has(p.pangram));
-      if (unseen.length === 0) {
-        seen = new Set();
-        unseen = pool;
-      }
-      const puzzle = unseen[Math.floor(Math.random() * unseen.length)];
-      seen.add(puzzle.pangram);
-      localStorage.setItem(SEEN_KEY, JSON.stringify([...seen]));
+      const history = loadHistory();
+      const puzzle = pickPuzzle(pool, history);
+      history.roundsPlayed++;
+      saveHistory(history);
 
       // The fee is taken now, so leaving mid-round counts as a loss
       buzz.spend(ENTRY_FEE);
@@ -125,6 +180,13 @@ Alpine.store("pangramble", {
     }
     this.round = { ...this.round, result: "won" };
     this.save();
+
+    // Found it: this pangram won't come up again
+    const history = loadHistory();
+    history.won = [...history.won, this.round.pangram];
+    delete history.lostAtRound[this.round.pangram];
+    saveHistory(history);
+
     Alpine.store("buzz").earn(this.round.payout, `pangramble-${this.round.id}`);
     window.dispatchEvent(new CustomEvent("pangramble-ended"));
   },
@@ -134,6 +196,12 @@ Alpine.store("pangramble", {
     if (!this.isPlaying) return;
     this.round = { ...this.round, result: "lost" };
     this.save();
+
+    // Missed it: it can come back after LOSS_COOLDOWN_ROUNDS more rounds
+    const history = loadHistory();
+    history.lostAtRound[this.round.pangram] = history.roundsPlayed;
+    saveHistory(history);
+
     window.dispatchEvent(new CustomEvent("pangramble-ended"));
   },
 });
