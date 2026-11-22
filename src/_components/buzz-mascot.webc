@@ -11,7 +11,7 @@
   x-data
   x-bind:src="$store.buzz.equippedOutfit?.image"
   x-bind:alt="`Buzz, wearing ${$store.buzz.equippedOutfit?.name}`"
-  src="/images/buzz/default.svg"
+  src="/images/buzz/default.png"
   alt="Buzz"
 />
 <style webc:scoped>
