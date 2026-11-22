@@ -4,28 +4,48 @@ title: What is this?
 tab: home
 ---
 
-<main class="about">
+<!--
+  Buzz explains the game, one speech bubble at a time.
+  The words live in src/_data/buzzTalk.json: edit them there, not here.
+-->
+<main class="about" x-data="buzzTalk" x-cloak>
   <h1>What is this?</h1>
-  <p>
-    Buzz Buzz is a word game. Each puzzle gives you seven letters, and you
-    make as many words from them as you can.
-  </p>
 
-  <h2>How to play</h2>
-  <ul>
-    <li>Words must be at least 4 letters long.</li>
-    <li>Every word must use the center letter.</li>
-    <li>Letters can be used more than once.</li>
-    <li>4-letter words are worth 1 point. Longer words are worth 1 point per letter.</li>
-    <li>A <strong>pangram</strong> uses all 7 letters, and earns 7 bonus points.</li>
-  </ul>
+  <div class="bubble" x-on:click="next()">
+    <p
+      webc:for="(bubble, index) of buzzTalk.bubbles"
+      :x-show="`step === ${index}`"
+      @html="bubble"
+    ></p>
+  </div>
 
-  <h2>Ways to play</h2>
-  <ul>
-    <li><strong>Daily:</strong> a new puzzle every day. Climb the ranks to Genius.</li>
-    <li><strong>Puzzles:</strong> find the hidden pangram to unlock the next puzzle.</li>
-    <li><strong>Pangramble:</strong> bet Buzz bucks and race the clock to find the pangram.</li>
-  </ul>
+  <buzz-mascot class="about-buzz"></buzz-mascot>
+
+  <div class="step-dots" aria-hidden="true">
+    <template x-for="i in total" x-bind:key="i">
+      <span x-bind:class="{ current: i - 1 === step }"></span>
+    </template>
+  </div>
+
+  <div class="talk-controls">
+    <button
+      type="button"
+      class="talk-back"
+      x-on:click="back()"
+      x-bind:disabled="step === 0"
+    >
+      Back
+    </button>
+    <button type="button" class="talk-next" x-show="!isLast" x-on:click="next()">
+      Next
+    </button>
+    <a
+      class="talk-next"
+      x-show="isLast"
+      :href="buzzTalk.lastLink"
+      @text="buzzTalk.lastButton"
+    ></a>
+  </div>
 
   <p class="credits">
     Based on <a href="https://github.com/Gyanreyer/open-spelling-bee">Open Spelling Bee</a>
@@ -33,35 +53,131 @@ tab: home
   </p>
 </main>
 
+<script webc:bucket="alpine">
+  Alpine.data("buzzTalk", () => ({
+    step: 0,
+    total: 0,
+    init() {
+      this.total = this.$el.querySelectorAll(".bubble p").length;
+    },
+    get isLast() {
+      return this.step === this.total - 1;
+    },
+    next() {
+      if (!this.isLast) this.step++;
+    },
+    back() {
+      if (this.step > 0) this.step--;
+    },
+  }));
+</script>
+
 <style>
   .about {
     max-width: 25rem;
     margin: 0 auto;
-    line-height: 1.45;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .about h1 {
-    font-size: 1.8rem;
-    margin: 0 0 0.75rem;
+    align-self: flex-start;
+    font-size: 1.6rem;
+    margin: 0.5rem 0 1.25rem;
   }
 
-  .about h2 {
+  /* The speech bubble, with a little tail pointing down at Buzz */
+  .bubble {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 7.5rem;
+    padding: 1.1rem 1.25rem;
+    border-radius: 1.25rem;
+    background: var(--surface);
+    border: 2px solid var(--yellow);
+    cursor: pointer;
+  }
+
+  .bubble::after {
+    content: "";
+    position: absolute;
+    bottom: -0.75rem;
+    left: 50%;
+    width: 1.25rem;
+    height: 1.25rem;
+    background: var(--surface);
+    border-right: 2px solid var(--yellow);
+    border-bottom: 2px solid var(--yellow);
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .bubble p {
+    margin: 0;
     font-size: 1.1rem;
-    margin-top: 1.75rem;
+    line-height: 1.45;
   }
 
-  .about ul {
-    padding-left: 1.2rem;
+  .about-buzz {
+    width: 12rem;
+    margin: 1.5rem auto 0.75rem;
   }
 
-  .about li {
-    margin-bottom: 0.35rem;
+  .step-dots {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .step-dots span {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--tile);
+  }
+
+  .step-dots span.current {
+    background: var(--yellow);
+  }
+
+  .talk-controls {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  .talk-controls button,
+  .talk-controls a {
+    padding: 0.85rem;
+    border: none;
+    border-radius: 0.75rem;
+    font-size: 1.05rem;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .talk-back {
+    background: var(--tile);
+    color: var(--text);
+  }
+
+  .talk-back:disabled {
+    opacity: 0.4;
+  }
+
+  .talk-next {
+    background: var(--gradient);
+    color: var(--text-on-yellow);
   }
 
   .credits {
-    margin-top: 2rem;
+    margin-top: 2.5rem;
     font-size: 0.8rem;
     color: var(--line);
+    text-align: center;
   }
 
   .credits a {
