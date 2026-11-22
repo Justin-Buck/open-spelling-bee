@@ -5,7 +5,6 @@ tab: home
 ---
 
 <main class="about">
-  <a class="back" href="/">‹ Home</a>
   <h1>What is this?</h1>
   <p>
     Buzz Buzz is a word game. Each puzzle gives you seven letters, and you
@@ -39,13 +38,6 @@ tab: home
     max-width: 25rem;
     margin: 0 auto;
     line-height: 1.45;
-  }
-
-  .about .back {
-    display: inline-block;
-    margin-bottom: 1rem;
-    color: var(--line);
-    text-decoration: none;
   }
 
   .about h1 {
