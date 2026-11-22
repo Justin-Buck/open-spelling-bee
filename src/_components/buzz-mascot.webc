@@ -21,5 +21,9 @@
     height: auto;
     aspect-ratio: 1749 / 1241;
     object-fit: contain;
+    /* A thin light "sticker" outline, so Buzz's black edges show up on the
+       dark background */
+    filter: drop-shadow(2px 0 0 var(--text)) drop-shadow(-2px 0 0 var(--text))
+      drop-shadow(0 2px 0 var(--text)) drop-shadow(0 -2px 0 var(--text));
   }
 </style>

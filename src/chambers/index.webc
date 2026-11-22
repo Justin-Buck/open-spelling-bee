@@ -136,6 +136,9 @@ tab: chambers
   }
 
   .outfits img {
+    /* Same sticker outline as <buzz-mascot> */
+    filter: drop-shadow(2px 0 0 var(--text)) drop-shadow(-2px 0 0 var(--text))
+      drop-shadow(0 2px 0 var(--text)) drop-shadow(0 -2px 0 var(--text));
     width: 100%;
     max-width: 7rem;
     aspect-ratio: 1749 / 1241;
