@@ -1,5 +1,5 @@
 const GENIUS_PERCENT_THRESHOLD = 0.7;
-const GENIUS_COIN_REWARD = 10;
+const GENIUS_COIN_REWARD = 25;
 
 /**
  * @param {string} timestamp

@@ -2,7 +2,7 @@
   {
     "order": 1,
     "difficulty": "Level 1",
-    "reward": 5,
+    "reward": 2,
     "clue": "/images/clues/telephone.png",
     "pangram": "telephone",
     "letterSet": "ehLnopt",
@@ -62,7 +62,7 @@
   {
     "order": 2,
     "difficulty": "Level 1",
-    "reward": 5,
+    "reward": 2,
     "clue": null,
     "pangram": "invisible",
     "letterSet": "Beilnsv",
@@ -120,7 +120,7 @@
   {
     "order": 3,
     "difficulty": "Level 1",
-    "reward": 5,
+    "reward": 2,
     "clue": "/images/clues/laundry.png",
     "pangram": "laundry",
     "letterSet": "Adlnruy",
@@ -176,8 +176,8 @@
   {
     "order": 4,
     "difficulty": "Level 1",
-    "reward": 5,
-    "clue": null,
+    "reward": 2,
+    "clue": "/images/clues/vegetable.png",
     "pangram": "vegetable",
     "letterSet": "aBegltv",
     "words": [
@@ -227,7 +227,7 @@
   {
     "order": 5,
     "difficulty": "Level 1",
-    "reward": 5,
+    "reward": 2,
     "clue": null,
     "pangram": "carnival",
     "letterSet": "acIlnrv",
@@ -283,7 +283,7 @@
   {
     "order": 6,
     "difficulty": "Level 1",
-    "reward": 5,
+    "reward": 2,
     "clue": null,
     "pangram": "balcony",
     "letterSet": "abClnoy",
@@ -335,7 +335,7 @@
   {
     "order": 7,
     "difficulty": "Level 1",
-    "reward": 5,
+    "reward": 2,
     "clue": null,
     "pangram": "alphabet",
     "letterSet": "abehlPt",
@@ -395,7 +395,7 @@
   {
     "order": 8,
     "difficulty": "Level 1",
-    "reward": 5,
+    "reward": 2,
     "clue": null,
     "pangram": "haircut",
     "letterSet": "Achirtu",
@@ -452,7 +452,7 @@
   {
     "order": 9,
     "difficulty": "Level 1",
-    "reward": 5,
+    "reward": 2,
     "clue": null,
     "pangram": "avalanche",
     "letterSet": "acehlNv",
@@ -499,7 +499,7 @@
   {
     "order": 10,
     "difficulty": "Level 1",
-    "reward": 5,
+    "reward": 2,
     "clue": null,
     "pangram": "spinach",
     "letterSet": "aChinps",
@@ -556,7 +556,7 @@
   {
     "order": 11,
     "difficulty": "Level 1",
-    "reward": 5,
+    "reward": 2,
     "clue": null,
     "pangram": "cupcakes",
     "letterSet": "aceKpsu",
@@ -613,7 +613,7 @@
   {
     "order": 12,
     "difficulty": "Level 2",
-    "reward": 10,
+    "reward": 4,
     "clue": null,
     "pangram": "mischief",
     "letterSet": "Cefhims",
@@ -658,7 +658,7 @@
   {
     "order": 13,
     "difficulty": "Level 2",
-    "reward": 10,
+    "reward": 4,
     "clue": null,
     "pangram": "bonfire",
     "letterSet": "befiNor",
@@ -715,7 +715,7 @@
   {
     "order": 14,
     "difficulty": "Level 2",
-    "reward": 10,
+    "reward": 4,
     "clue": null,
     "pangram": "pendulum",
     "letterSet": "delMnpu",
@@ -767,7 +767,7 @@
   {
     "order": 15,
     "difficulty": "Level 2",
-    "reward": 10,
+    "reward": 4,
     "clue": null,
     "pangram": "pumpkins",
     "letterSet": "ikmNpsu",
@@ -825,7 +825,7 @@
   {
     "order": 16,
     "difficulty": "Level 2",
-    "reward": 10,
+    "reward": 4,
     "clue": null,
     "pangram": "vertigo",
     "letterSet": "eGiortv",
@@ -877,7 +877,7 @@
   {
     "order": 17,
     "difficulty": "Level 2",
-    "reward": 10,
+    "reward": 4,
     "clue": null,
     "pangram": "kangaroos",
     "letterSet": "aGknors",
@@ -936,7 +936,7 @@
   {
     "order": 18,
     "difficulty": "Level 2",
-    "reward": 10,
+    "reward": 4,
     "clue": null,
     "pangram": "trombone",
     "letterSet": "Bemnort",
@@ -995,7 +995,7 @@
   {
     "order": 19,
     "difficulty": "Level 2",
-    "reward": 10,
+    "reward": 4,
     "clue": null,
     "pangram": "firework",
     "letterSet": "Efikorw",
@@ -1051,7 +1051,7 @@
   {
     "order": 20,
     "difficulty": "Level 2",
-    "reward": 10,
+    "reward": 4,
     "clue": null,
     "pangram": "burritos",
     "letterSet": "bIorstu",
@@ -1106,7 +1106,7 @@
   {
     "order": 21,
     "difficulty": "Level 3",
-    "reward": 15,
+    "reward": 6,
     "clue": null,
     "pangram": "daffodils",
     "letterSet": "adFilos",
@@ -1164,7 +1164,7 @@
   {
     "order": 22,
     "difficulty": "Level 3",
-    "reward": 15,
+    "reward": 6,
     "clue": null,
     "pangram": "hydrant",
     "letterSet": "Adhnrty",
@@ -1224,7 +1224,7 @@
   {
     "order": 23,
     "difficulty": "Level 3",
-    "reward": 15,
+    "reward": 6,
     "clue": null,
     "pangram": "icebergs",
     "letterSet": "Bcegirs",
@@ -1283,7 +1283,7 @@
   {
     "order": 24,
     "difficulty": "Level 3",
-    "reward": 15,
+    "reward": 6,
     "clue": null,
     "pangram": "hammocks",
     "letterSet": "achKmos",
@@ -1339,7 +1339,7 @@
   {
     "order": 25,
     "difficulty": "Level 3",
-    "reward": 15,
+    "reward": 6,
     "clue": null,
     "pangram": "piglets",
     "letterSet": "eGilpst",
@@ -1387,7 +1387,7 @@
   {
     "order": 26,
     "difficulty": "Level 3",
-    "reward": 15,
+    "reward": 6,
     "clue": null,
     "pangram": "haywire",
     "letterSet": "aEhirwy",
@@ -1444,7 +1444,7 @@
   {
     "order": 27,
     "difficulty": "Level 3",
-    "reward": 15,
+    "reward": 6,
     "clue": null,
     "pangram": "figment",
     "letterSet": "efGimnt",
@@ -1499,7 +1499,7 @@
   {
     "order": 28,
     "difficulty": "Level 3",
-    "reward": 15,
+    "reward": 6,
     "clue": null,
     "pangram": "warthog",
     "letterSet": "aghoRtw",
@@ -1553,7 +1553,7 @@
   {
     "order": 29,
     "difficulty": "Level 3",
-    "reward": 15,
+    "reward": 6,
     "clue": null,
     "pangram": "honeydew",
     "letterSet": "dehnOwy",
@@ -1605,7 +1605,7 @@
   {
     "order": 30,
     "difficulty": "Level 3",
-    "reward": 15,
+    "reward": 6,
     "clue": null,
     "pangram": "loincloth",
     "letterSet": "chilNot",
