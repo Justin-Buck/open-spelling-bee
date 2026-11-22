@@ -8,44 +8,36 @@ tab: home
   Buzz explains the game, one speech bubble at a time.
   The words live in src/_data/buzzTalk.json: edit them there, not here.
 -->
-<main class="about" x-data="buzzTalk" x-cloak>
+<main
+  class="about"
+  x-data="buzzTalk"
+  x-cloak
+  x-on:click.window="next($event)"
+  x-on:keydown.window.enter="next()"
+  x-on:keydown.window.space.prevent="next()"
+>
   <h1>What is this?</h1>
 
-  <div class="bubble" x-on:click="next()">
+  <div class="bubble" aria-live="polite">
     <p
       webc:for="(bubble, index) of buzzTalk.bubbles"
       :x-show="`step === ${index}`"
       @html="bubble"
     ></p>
+    <!-- Blinking dots: tap anywhere to keep going -->
+    <span class="more" x-show="!isLast" aria-hidden="true">...</span>
   </div>
 
   <buzz-mascot class="about-buzz"></buzz-mascot>
 
-  <div class="step-dots" aria-hidden="true">
-    <template x-for="i in total" x-bind:key="i">
-      <span x-bind:class="{ current: i - 1 === step }"></span>
-    </template>
-  </div>
+  <p class="tap-hint" x-show="step === 0" aria-hidden="true">Tap to continue</p>
 
-  <div class="talk-controls">
-    <button
-      type="button"
-      class="talk-back"
-      x-on:click="back()"
-      x-bind:disabled="step === 0"
-    >
-      Back
-    </button>
-    <button type="button" class="talk-next" x-show="!isLast" x-on:click="next()">
-      Next
-    </button>
-    <a
-      class="talk-next"
-      x-show="isLast"
-      :href="buzzTalk.lastLink"
-      @text="buzzTalk.lastButton"
-    ></a>
-  </div>
+  <a
+    class="talk-done"
+    x-show="isLast"
+    :href="buzzTalk.lastLink"
+    @text="buzzTalk.lastButton"
+  ></a>
 
   <p class="credits">
     Based on <a href="https://github.com/Gyanreyer/open-spelling-bee">Open Spelling Bee</a>
@@ -63,19 +55,25 @@ tab: home
     get isLast() {
       return this.step === this.total - 1;
     },
-    next() {
+    // A tap anywhere on the screen moves to Buzz's next line
+    // (taps on links, like the tabs or the last button, just follow the link)
+    next(event) {
+      if (event?.target.closest("a")) return;
       if (!this.isLast) this.step++;
-    },
-    back() {
-      if (this.step > 0) this.step--;
     },
   }));
 </script>
 
 <style>
+  /* The whole screen is tappable */
+  body:has(.about) {
+    cursor: pointer;
+  }
+
   .about {
     max-width: 25rem;
     margin: 0 auto;
+    -webkit-tap-highlight-color: transparent;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -97,7 +95,6 @@ tab: home
     border-radius: 1.25rem;
     background: var(--surface);
     border: 2px solid var(--yellow);
-    cursor: pointer;
   }
 
   .bubble::after {
@@ -124,53 +121,47 @@ tab: home
     margin: 1.5rem auto 0.75rem;
   }
 
-  .step-dots {
-    display: flex;
-    gap: 0.4rem;
-    margin-bottom: 1.25rem;
+  /* The "..." at the end of each line, pulsing to say "tap for more" */
+  .more {
+    display: block;
+    text-align: right;
+    margin-top: 0.25rem;
+    color: var(--yellow);
+    font-size: 1.4rem;
+    font-weight: bold;
+    line-height: 0.5;
+    letter-spacing: 0.1em;
+    animation: more-pulse 1.2s ease-in-out infinite;
   }
 
-  .step-dots span {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    background: var(--tile);
+  @keyframes more-pulse {
+    0%,
+    100% {
+      opacity: 0.25;
+    }
+    50% {
+      opacity: 1;
+    }
   }
 
-  .step-dots span.current {
-    background: var(--yellow);
+  .tap-hint {
+    margin: 0;
+    color: var(--line);
+    font-size: 0.85rem;
   }
 
-  .talk-controls {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 0.75rem;
+  .talk-done {
+    display: block;
     width: 100%;
-  }
-
-  .talk-controls button,
-  .talk-controls a {
+    box-sizing: border-box;
     padding: 0.85rem;
-    border: none;
     border-radius: 0.75rem;
+    background: var(--gradient);
+    color: var(--text-on-yellow);
     font-size: 1.05rem;
     font-weight: bold;
     text-align: center;
     text-decoration: none;
-  }
-
-  .talk-back {
-    background: var(--tile);
-    color: var(--text);
-  }
-
-  .talk-back:disabled {
-    opacity: 0.4;
-  }
-
-  .talk-next {
-    background: var(--gradient);
-    color: var(--text-on-yellow);
   }
 
   .credits {
