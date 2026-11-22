@@ -5,7 +5,8 @@ tab: home
 ---
 
 <!--
-  Buzz explains the game, one speech bubble at a time.
+  Buzz explains the game, one speech bubble at a time, typing each line out
+  as if he's saying it. Tap to finish a line early, then tap for the next.
   The words live in src/_data/buzzTalk.json: edit them there, not here.
 -->
 <main
@@ -18,14 +19,14 @@ tab: home
 >
   <h1>What is this?</h1>
 
-  <div class="bubble" aria-live="polite">
+  <div class="bubble">
     <p
       webc:for="(bubble, index) of buzzTalk.bubbles"
       :x-show="`step === ${index}`"
       @html="bubble"
     ></p>
     <!-- Blinking dots: tap anywhere to keep going -->
-    <span class="more" x-show="!isLast" aria-hidden="true">...</span>
+    <span class="more" x-show="!isLast && !isTyping" aria-hidden="true">...</span>
   </div>
 
   <buzz-mascot class="about-buzz"></buzz-mascot>
@@ -34,34 +35,101 @@ tab: home
 
   <a
     class="talk-done"
-    x-show="isLast"
+    x-show="isLast && !isTyping"
     :href="buzzTalk.lastLink"
     @text="buzzTalk.lastButton"
   ></a>
 
-  <p class="credits">
-    Based on <a href="https://github.com/Gyanreyer/open-spelling-bee">Open Spelling Bee</a>
-    by Ryan Geyer, MIT license.
-  </p>
 </main>
 
 <script webc:bucket="alpine">
+  // How fast Buzz "speaks": milliseconds per letter
+  const TYPING_SPEED = 30;
+
   Alpine.data("buzzTalk", () => ({
     step: 0,
     total: 0,
+    isTyping: false,
+    lines: [],
+
     init() {
-      this.total = this.$el.querySelectorAll(".bubble p").length;
+      this.lines = [...this.$el.querySelectorAll(".bubble p")];
+      this.total = this.lines.length;
+      // Remember each line's full text (with any bold or italics)
+      this.lines.forEach((line) => (line.dataset.full = line.innerHTML));
+      this.typeLine();
     },
+
     get isLast() {
       return this.step === this.total - 1;
     },
-    // A tap anywhere on the screen moves to Buzz's next line
-    // (taps on links, like the tabs or the last button, just follow the link)
+
+    // A tap anywhere on the screen finishes the line being typed, or moves
+    // to Buzz's next line (taps on links, like the tabs, just follow the link)
     next(event) {
       if (event?.target.closest("a")) return;
-      if (!this.isLast) this.step++;
+      if (this.isTyping) {
+        this.finishLine();
+      } else if (!this.isLast) {
+        this.step++;
+        this.typeLine();
+      }
+    },
+
+    // Types the current line out one letter at a time
+    typeLine() {
+      const line = this.lines[this.step];
+      const fullHtml = line.dataset.full;
+
+      // People who turn off animations on their phone get the whole line
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        line.innerHTML = fullHtml;
+        return;
+      }
+
+      const totalLetters = textLength(fullHtml);
+      let shown = 0;
+      line.innerHTML = "";
+      this.isTyping = true;
+      clearInterval(this.timer);
+      this.timer = setInterval(() => {
+        shown++;
+        line.innerHTML = firstLetters(fullHtml, shown);
+        if (shown >= totalLetters) this.finishLine();
+      }, TYPING_SPEED);
+    },
+
+    finishLine() {
+      clearInterval(this.timer);
+      this.lines[this.step].innerHTML = this.lines[this.step].dataset.full;
+      this.isTyping = false;
     },
   }));
+
+  // How many letters are in some HTML, not counting its tags
+  function textLength(html) {
+    const box = document.createElement("div");
+    box.innerHTML = html;
+    return box.textContent.length;
+  }
+
+  // The HTML cut off after `count` letters, keeping tags like <strong> whole
+  function firstLetters(html, count) {
+    const box = document.createElement("div");
+    box.innerHTML = html;
+    let left = count;
+    const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT);
+    let node;
+    while ((node = walker.nextNode())) {
+      if (left >= node.textContent.length) {
+        left -= node.textContent.length;
+      } else {
+        node.textContent = node.textContent.slice(0, left);
+        left = 0;
+      }
+    }
+    return box.innerHTML;
+  }
 </script>
 
 <style>
@@ -162,16 +230,5 @@ tab: home
     font-weight: bold;
     text-align: center;
     text-decoration: none;
-  }
-
-  .credits {
-    margin-top: 2.5rem;
-    font-size: 0.8rem;
-    color: var(--line);
-    text-align: center;
-  }
-
-  .credits a {
-    color: var(--line);
   }
 </style>
