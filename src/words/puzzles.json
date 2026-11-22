@@ -3,7 +3,7 @@
     "order": 1,
     "difficulty": "Level 1",
     "reward": 5,
-    "clue": null,
+    "clue": "/images/clues/telephone.png",
     "pangram": "telephone",
     "letterSet": "ehLnopt",
     "words": [
@@ -121,7 +121,7 @@
     "order": 3,
     "difficulty": "Level 1",
     "reward": 5,
-    "clue": null,
+    "clue": "/images/clues/laundry.png",
     "pangram": "laundry",
     "letterSet": "Adlnruy",
     "words": [
