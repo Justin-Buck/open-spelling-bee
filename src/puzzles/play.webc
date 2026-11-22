@@ -19,7 +19,8 @@ tab: puzzles
         x-text="$store.game.puzzle?.difficulty"
       ></span>
     </div>
-    <puzzle-clue-button></puzzle-clue-button>
+    <!-- Empty right column, so the title stays centered -->
+    <span></span>
   </div>
   <p class="puzzle-goal" x-data x-show="!$store.game.isPuzzleSolved">
     Find the pangram to solve this puzzle.
@@ -28,6 +29,7 @@ tab: puzzles
     Solved! Keep finding words, or try the
     <a href="/puzzles/">next puzzle</a>.
   </p>
+  <puzzle-clue-button class="puzzle-clue"></puzzle-clue-button>
   <!-- No rank bar or guessed-words list here: the goal is just the pangram -->
   <page-main></page-main>
   <puzzle-solved-modal></puzzle-solved-modal>
@@ -41,9 +43,9 @@ tab: puzzles
 
 <style>
   .puzzle-bar {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
     gap: 0.5rem;
     max-width: 25rem;
     margin: 0 auto 0.75rem;
@@ -77,6 +79,12 @@ tab: puzzles
 
   .puzzle-goal.solved {
     color: var(--yellow);
+  }
+
+  .puzzle-clue {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 0.75rem;
   }
 
   .puzzle-goal.solved a {
