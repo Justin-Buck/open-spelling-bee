@@ -140,6 +140,9 @@ tab: home
   /* The whole screen is tappable */
   body:has(.about) {
     cursor: pointer;
+    /* Tapping quickly shouldn't select (and highlight) Buzz's words */
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   /* Buzz and his bubble sit in the middle of the screen, a little low */
@@ -150,7 +153,6 @@ tab: home
     padding-top: 3rem;
     box-sizing: border-box;
     justify-content: center;
-    -webkit-tap-highlight-color: transparent;
     display: flex;
     flex-direction: column;
     align-items: center;
