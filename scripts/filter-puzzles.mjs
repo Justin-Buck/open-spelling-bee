@@ -4,9 +4,11 @@
 // Inputs:  src/words/en.json             (master list, never modified)
 //          scripts/puzzle-picks.json     (your hand-picked puzzle mode words)
 //          src/images/clues/             (picture clues, named after each pangram)
+//          scripts/pangram-frequencies.json (how common each pangram is)
 // Outputs: src/words/daily.json(.gz)     Mode 1 - daily puzzles
 //          src/words/puzzles.json        Mode 2 - the launch puzzles, in unlock order
 //          src/words/wager-pool.json(.gz) Mode 3 - every other pangram puzzle
+//                                        that's common enough to find quickly
 //
 // Holdout picks go into NO output file. They stay reserved in puzzle-picks.json
 // until you move them into "launch" for a future update.
@@ -15,6 +17,9 @@ import fs from "node:fs";
 import zlib from "node:zlib";
 
 const GENIUS_PERCENT = 0.7;
+// Pangramble only uses pangrams at least this common (Zipf scale, 0-7),
+// so nobody loses coins on a word like "mercerizes" in 20 seconds
+const WAGER_MIN_FREQUENCY = 2;
 const DAILY_MAX_GENIUS = 120; // daily puzzles must have Genius below this
 
 // ---------------------------------------------------------------------------
@@ -177,8 +182,19 @@ const puzzleModePuzzles = picks.launch.map((pick, i) => {
   };
 });
 
-// Mode 3: everything that wasn't picked (launch OR holdout)
-const wagerPool = pangramPool.filter((p) => !seenPicks.has(p.pangram));
+// Mode 3: everything that wasn't picked (launch OR holdout), and common
+// enough to find against the clock. Frequencies come from
+// scripts/pangram-frequencies.json.
+const { frequencies } = JSON.parse(
+  fs.readFileSync("scripts/pangram-frequencies.json", "utf8")
+);
+const notPicked = pangramPool.filter((p) => !seenPicks.has(p.pangram));
+const missingFrequency = notPicked.filter(
+  (p) => frequencies[p.pangram] === undefined
+);
+const wagerPool = notPicked.filter(
+  (p) => frequencies[p.pangram] >= WAGER_MIN_FREQUENCY
+);
 
 // ---------------------------------------------------------------------------
 // 8. Write the output files
@@ -209,3 +225,13 @@ console.log(
 );
 console.log(`  Held out for later:       ${picks.holdout.length}`);
 console.log(`  Wager mode:               ${wagerPool.length}`);
+console.log(
+  `  Too obscure for wager:    ${notPicked.length - wagerPool.length}`
+);
+if (missingFrequency.length > 0) {
+  // New pangrams (e.g. after changing the word list) have no frequency yet,
+  // so they're left out of Pangramble until they're added to the file
+  console.log(
+    `  (no frequency, left out: ${missingFrequency.length}, e.g. "${missingFrequency[0].pangram}")`
+  );
+}
