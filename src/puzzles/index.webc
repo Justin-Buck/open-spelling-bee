@@ -33,7 +33,7 @@ tab: puzzles
         x-bind:class="state"
         x-bind:aria-disabled="state === 'locked'"
         x-on:click="if (state === 'locked') $event.preventDefault()"
-        :aria-label="`Puzzle ${puzzle.order}, ${puzzle.difficulty}, ${puzzle.reward} coins`"
+        :aria-label="`Puzzle ${puzzle.order}, ${puzzle.difficulty}, ${puzzle.reward} Buzz bucks`"
       >
         <span class="tile-number" @text="puzzle.order"></span>
         <span class="tile-status" x-text="statusText"></span>

@@ -482,7 +482,7 @@ Alpine.store("game", {
       }
     }
   },
-  // Reaching Genius pays Buzz coins, once per daily puzzle
+  // Reaching Genius pays Buzz bucks, once per daily puzzle
   payGeniusReward() {
     if (!this.timestamp) return;
     const wasPaid = Alpine.store("buzz").earn(
@@ -492,8 +492,8 @@ Alpine.store("game", {
     if (wasPaid) {
       this.showNotification({
         class: "valid-guess gradient-bg",
-        message: `Genius! +${GENIUS_COIN_REWARD} Buzz coins`,
-        ariaLabel: `You reached Genius and earned ${GENIUS_COIN_REWARD} Buzz coins.`,
+        message: `Genius! +${GENIUS_COIN_REWARD} Buzz bucks`,
+        ariaLabel: `You reached Genius and earned ${GENIUS_COIN_REWARD} Buzz bucks.`,
       });
     }
   },

@@ -12,7 +12,7 @@
     </p>
     <p class="solved-coins" x-show="$store.game.puzzleCoinsEarned > 0">
       <coin-icon width="20" height="20"></coin-icon>
-      <span x-text="`+${$store.game.puzzleCoinsEarned} Buzz coins`"></span>
+      <span x-text="`+${$store.game.puzzleCoinsEarned} Buzz bucks`"></span>
     </p>
     <div class="solved-actions">
       <a

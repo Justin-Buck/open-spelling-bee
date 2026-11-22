@@ -1,4 +1,4 @@
-// Pangramble: pay 5 Buzz coins, pick how much time you want, then find the
+// Pangramble: pay 5 Buzz bucks, pick how much time you want, then find the
 // pangram before the clock runs out. Less time pays more.
 //
 // The round in progress is saved, so closing or reloading the app doesn't

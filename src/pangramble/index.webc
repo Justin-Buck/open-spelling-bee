@@ -18,14 +18,14 @@ tab: pangramble
     <a class="start-button" href="/pangramble/play/">Back to your round</a>
   </div>
 
-  <!-- Not enough coins to play -->
+  <!-- Not enough Buzz bucks to play -->
   <div
     x-show="!$store.pangramble.isPlaying && !canAfford"
     class="pangramble-panel"
   >
     <p>
-      You need <strong x-text="`${$store.pangramble.entryFee} Buzz coins`"></strong>
-      to play. Earn coins by reaching Genius in Daily, or by solving Puzzles.
+      You need <strong x-text="`${$store.pangramble.entryFee} Buzz bucks`"></strong>
+      to play. Earn bucks by reaching Genius in Daily, or by solving Puzzles.
     </p>
     <div class="earn-links">
       <a href="/daily/">Daily</a>
@@ -36,7 +36,7 @@ tab: pangramble
   <!-- Pick your time, then pay and play -->
   <div x-show="!$store.pangramble.isPlaying && canAfford">
     <p class="pangramble-rules">
-      <span x-text="$store.pangramble.entryFee"></span> coins to play. Find the
+      <span x-text="$store.pangramble.entryFee"></span> Buzz bucks to play. Find the
       pangram before time runs out. Less time pays more.
     </p>
 
@@ -62,7 +62,7 @@ tab: pangramble
       x-bind:disabled="!chosenSeconds || $store.pangramble.isStarting"
       x-on:click="startRound()"
       x-text="chosenSeconds
-        ? `Pay ${$store.pangramble.entryFee} coins and start`
+        ? `Pay ${$store.pangramble.entryFee} bucks and start`
         : 'Pick your time'"
     ></button>
   </div>

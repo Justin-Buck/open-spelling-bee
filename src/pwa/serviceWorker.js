@@ -1,4 +1,4 @@
-const cacheName = "buzz-buzz-2.3.2";
+const cacheName = "buzz-buzz-2.4.0";
 const IS_DEV = self.location.hostname === "localhost";
 
 const wordDataPathname = "/words/en";
@@ -31,7 +31,7 @@ async function precacheEverything() {
 
   // Each page links to its own bundled CSS and JS files, which have
   // generated names like /bundle/UDFDD4Q07V.js, and to pictures like
-  // /images/buzz/default.svg. Read each saved page to find them, and save
+  // /images/buzz/default.png. Read each saved page to find them, and save
   // those too. (Every page lists all of Buzz's outfits, so this saves the
   // pictures of outfits you haven't bought yet, ready for when you do.)
   for (const page of PAGES) {

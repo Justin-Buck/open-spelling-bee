@@ -1,4 +1,6 @@
-// Buzz's wallet: coins, the outfits you own, and the one Buzz is wearing.
+// Buzz's wallet: Buzz bucks, the outfits you own, and the one Buzz is wearing.
+// (In the code they're called "coins": renaming the saved field would wipe
+// everyone's balance, so only the words players see say "Buzz bucks".)
 // Every page loads this, so any page can read or change it with $store.buzz.
 //
 // The outfit list comes from src/_data/outfits.json. The layout puts it on

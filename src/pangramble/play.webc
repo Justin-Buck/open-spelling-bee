@@ -16,7 +16,7 @@ tab: pangramble
   </div>
   <pangramble-timer></pangramble-timer>
   <p class="pangramble-goal">Find the pangram before time runs out!</p>
-  <page-header></page-header>
+  <!-- No rank bar or guessed-words list here: the goal is just the pangram -->
   <page-main></page-main>
   <pangramble-result-modal></pangramble-result-modal>
 </div>

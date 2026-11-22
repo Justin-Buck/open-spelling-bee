@@ -14,8 +14,8 @@
       <coin-icon width="20" height="20"></coin-icon>
       <span
         x-text="won
-          ? `+${$store.pangramble.round?.payout} Buzz coins`
-          : `-${$store.pangramble.entryFee} Buzz coins`"
+          ? `+${$store.pangramble.round?.payout} Buzz bucks`
+          : `-${$store.pangramble.entryFee} Buzz bucks`"
       ></span>
     </p>
     <div class="result-actions">

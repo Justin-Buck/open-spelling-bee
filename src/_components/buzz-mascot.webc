@@ -19,7 +19,7 @@
     display: block;
     width: 10rem;
     height: auto;
-    aspect-ratio: 200 / 220;
+    aspect-ratio: 1749 / 1241;
     object-fit: contain;
   }
 </style>

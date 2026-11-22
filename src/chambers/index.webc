@@ -22,8 +22,8 @@ tab: chambers
     >
       <!-- Outfits stay a mystery until you buy them -->
       <img
-        src="/images/buzz/mystery.svg"
-        x-bind:src="isOwned ? image : '/images/buzz/mystery.svg'"
+        src="/images/buzz/mystery.png"
+        x-bind:src="isOwned ? image : '/images/buzz/mystery.png'"
         :alt="outfit.name"
       />
       <span class="outfit-name" @text="outfit.name"></span>
@@ -138,7 +138,7 @@ tab: chambers
   .outfits img {
     width: 100%;
     max-width: 7rem;
-    aspect-ratio: 200 / 220;
+    aspect-ratio: 1749 / 1241;
     object-fit: contain;
   }
 
