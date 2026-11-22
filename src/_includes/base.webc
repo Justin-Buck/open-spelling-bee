@@ -20,6 +20,8 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     <link rel="manifest" href="/manifest.json" />
+    <!-- Color of the phone's status bar above the app -->
+    <meta name="theme-color" content="#121212" />
 
     <!-- Pre-connect to the jsdelivr cdn since we'll be loading a few 3rd party libraries from there -->
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />

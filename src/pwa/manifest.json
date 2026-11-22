@@ -3,7 +3,7 @@
   "description": "A word game: make words from seven letters",
   "start_url": "/",
   "id": "/",
-  "display": "fullscreen",
+  "display": "standalone",
   "icons": [
     {
       "src": "/icon192x192.png",
@@ -27,7 +27,7 @@
       "sizes": "32x32"
     }
   ],
-  "theme_color": "#fdd000",
+  "theme_color": "#121212",
   "background_color": "#121212",
   "short_name": "Buzz Buzz"
 }

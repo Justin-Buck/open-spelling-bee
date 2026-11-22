@@ -24,6 +24,8 @@ body {
   width: calc(100% - 2rem);
   margin: 0;
   padding: 1rem;
+  /* Stay below a phone's camera notch or status bar, if the page reaches it */
+  padding-top: calc(1rem + env(safe-area-inset-top));
 }
 
 .gradient-bg {
