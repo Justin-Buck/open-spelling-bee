@@ -17,7 +17,8 @@ tab: home
   x-on:keydown.window.enter="next()"
   x-on:keydown.window.space.prevent="next()"
 >
-  <h1>What is this?</h1>
+  <!-- No visible title; screen readers still hear it -->
+  <h1 class="visually-hidden">What is this?</h1>
 
   <div class="bubble">
     <p
@@ -31,14 +32,17 @@ tab: home
 
   <buzz-mascot class="about-buzz"></buzz-mascot>
 
-  <p class="tap-hint" x-show="step === 0" aria-hidden="true">Tap to continue</p>
+  <!-- Same height whatever shows here, so Buzz doesn't jump around -->
+  <div class="talk-footer">
+    <p class="tap-hint" x-show="step === 0" aria-hidden="true">Tap to continue</p>
 
-  <a
-    class="talk-done"
-    x-show="isLast && !isTyping"
-    :href="buzzTalk.lastLink"
-    @text="buzzTalk.lastButton"
-  ></a>
+    <a
+      class="talk-done"
+      x-show="isLast && !isTyping"
+      :href="buzzTalk.lastLink"
+      @text="buzzTalk.lastButton"
+    ></a>
+  </div>
 
 </main>
 
@@ -138,19 +142,27 @@ tab: home
     cursor: pointer;
   }
 
+  /* Buzz and his bubble sit in the middle of the screen, a little low */
   .about {
     max-width: 25rem;
+    min-height: calc(100dvh - 8rem - env(safe-area-inset-top));
     margin: 0 auto;
+    padding-top: 3rem;
+    box-sizing: border-box;
+    justify-content: center;
     -webkit-tap-highlight-color: transparent;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
-  .about h1 {
-    align-self: flex-start;
-    font-size: 1.6rem;
-    margin: 0.5rem 0 1.25rem;
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 
   /* The speech bubble, with a little tail pointing down at Buzz */
@@ -210,6 +222,14 @@ tab: home
     50% {
       opacity: 1;
     }
+  }
+
+  .talk-footer {
+    width: 100%;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .tap-hint {
