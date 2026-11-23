@@ -1,4 +1,4 @@
-const cacheName = "buzz-buzz-2.8.3";
+const cacheName = "buzz-buzz-2.9.0";
 const IS_DEV = self.location.hostname === "localhost";
 
 const wordDataPathname = "/words/en";

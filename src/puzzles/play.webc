@@ -2,6 +2,7 @@
 layout: base.webc
 title: Puzzle
 tab: puzzles
+playScreen: true
 ---
 
 <!--

@@ -3,6 +3,7 @@
   Shared layout for every page of Buzz Buzz.
   A page picks it with `layout: base.webc` in its front matter, and sets:
     title: shown in the browser tab
+    playScreen: true on pages with the letter board, so the page can't scroll
     tab:   which tab to highlight (home, daily, puzzles, pangramble or bedroom)
   The page's own content is dropped in where @raw="content" is.
 -->
@@ -65,7 +66,7 @@
       webc:keep
     ></script>
   </head>
-  <body x-data>
+  <body x-data :class="playScreen ? 'play-screen' : ''">
     <template @raw="content" webc:nokeep></template>
 
     <tab-bar :@active="tab"></tab-bar>

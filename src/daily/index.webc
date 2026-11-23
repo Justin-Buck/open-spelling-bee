@@ -2,6 +2,7 @@
 layout: base.webc
 title: Daily
 tab: daily
+playScreen: true
 ---
 
 <loading-indicator x-show="false"></loading-indicator>

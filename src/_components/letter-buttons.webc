@@ -34,17 +34,19 @@
 </script>
 <style webc:scoped>
   :host {
-    margin: 2rem auto;
+    /* Less space around the letters on short phones */
+    margin: clamp(0.5rem, 3dvh, 2rem) auto;
     display: block;
     position: relative;
-    --button-wrapper-size: 60vw;
+    /* Fits the width, and on short phones the height too */
+    --button-wrapper-size: min(60vw, 32dvh);
     --button-wrapper-max-size: 20rem;
     width: var(--button-wrapper-size);
     max-width: var(--button-wrapper-max-size);
     aspect-ratio: 1;
 
     /* Button widths are the wrapper's width / 2.5 */
-    --button-size: 24vw;
+    --button-size: calc(var(--button-wrapper-size) / 2.5);
     --button-max-size: 8rem;
   }
 

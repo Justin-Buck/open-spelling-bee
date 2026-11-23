@@ -2,6 +2,7 @@
 layout: base.webc
 title: Pangramble
 tab: pangramble
+playScreen: true
 ---
 
 <!--
