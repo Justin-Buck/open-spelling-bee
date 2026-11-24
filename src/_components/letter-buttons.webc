@@ -5,25 +5,43 @@
     x-bind:key="`${letter}_${idx}`"
   >
     <div class="outer letter">
-      <button x-data="letterButton(letter)" x-bind="tmpl"></button>
+      <button x-data="letterButton(letter)" x-bind="tmpl">
+        <span class="hex" x-text="letter"></span>
+      </button>
     </div>
   </template>
   <div class="center letter">
     <button
-      class="gradient-bg"
       x-data="letterButton($store.game.centerLetter)"
       x-effect="letter = $store.game.centerLetter"
       x-bind="tmpl"
-    ></button>
+    >
+      <span class="hex gradient-bg" x-text="letter"></span>
+    </button>
   </div>
 </div>
 <script webc:bucket="alpine">
   Alpine.data("letterButton", (letter) => ({
     letter,
+    pressed: false,
+    // Each letter keeps its own timer (declared here so it isn't shared)
+    pressTimer: null,
+    // The letter is added the moment a finger (or mouse button) goes down,
+    // so lifting or sliding a little can't cancel it
+    press(event) {
+      if (event.button !== 0) return;
+      event.preventDefault();
+      this.guess += this.letter;
+      // Brief "pressed" look, since the browser's own :active style
+      // doesn't show reliably once the touch is handled this way
+      this.pressed = true;
+      clearTimeout(this.pressTimer);
+      this.pressTimer = setTimeout(() => (this.pressed = false), 120);
+    },
     tmpl: {
-      "x-text": "letter",
       type: "button",
-      "@click": "guess += letter",
+      "@pointerdown": "press($event)",
+      ":class": "{ pressed }",
       // Hiding these buttons from screen readers because they will just be noisy and hard to navigate;
       // if using the keyboard, the user will be expected to type their guess into the text input
       // instead of clicking these buttons.
@@ -59,31 +77,45 @@
     transform: translate(var(--translate-x), var(--translate-y));
   }
 
+  /* The button is the touch target: a full-size hexagon, so the letters
+     meet edge to edge with no gaps for a tap to fall into */
   button {
+    display: block;
     clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-    font-weight: 600;
-    font-size: 2.2rem;
-
+    background: none;
     border: none;
-    text-transform: uppercase;
 
     width: var(--button-size);
     max-width: var(--button-max-size);
     aspect-ratio: 1.15;
+  }
+
+  /* The hexagon you see sits inside it, a little smaller. Only this part
+     shrinks when pressed, so the touch target never moves */
+  .hex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    font-weight: 600;
+    font-size: 2.2rem;
+    text-transform: uppercase;
 
     --scale: 0.925;
     transform: scale(var(--scale));
 
     transition-property: transform, opacity;
-    transition-duration: 0.2s;
+    transition-duration: 0.12s;
   }
 
-  button:active {
+  button.pressed .hex {
     --scale: 0.85;
     opacity: 0.8;
   }
 
-  .outer.letter button {
+  .outer.letter .hex {
     background: var(--gray);
   }
 
