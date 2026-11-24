@@ -10,7 +10,7 @@ playScreen: true
   game.mjs sees this address and loads that puzzle instead of the daily one.
 -->
 <loading-indicator x-show="false"></loading-indicator>
-<div x-cloak>
+<div class="play-area" x-cloak>
   <div class="puzzle-bar" x-data>
     <div class="puzzle-title">
       <strong x-text="`Puzzle ${$store.game.puzzle?.order ?? ''}`"></strong>

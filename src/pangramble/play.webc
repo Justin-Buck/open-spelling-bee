@@ -10,7 +10,7 @@ playScreen: true
   game.mjs sees this address and loads that round's letters.
 -->
 <loading-indicator x-show="false"></loading-indicator>
-<div x-cloak>
+<div class="play-area" x-cloak>
   <div class="pangramble-bar">
     <coin-balance></coin-balance>
   </div>

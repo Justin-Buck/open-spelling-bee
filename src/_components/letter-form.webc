@@ -29,8 +29,9 @@
 </form>
 <style webc:scoped>
   :host {
-    /* 6rem of space on tall phones, less on short ones so everything fits */
-    margin-top: clamp(0.5rem, 20dvh - 4.5rem, 6rem);
+    /* The play area (reset.css) decides where the board sits; this is just
+       a little breathing room under the guess notifications */
+    margin-top: 0.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;

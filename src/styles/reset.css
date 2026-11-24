@@ -30,6 +30,31 @@ body.play-screen {
   user-select: none;
 }
 
+/* The letter board sits at the same spot on every play screen (Daily, a
+   puzzle, a Pangramble round), however much is above it. The play area
+   fills the screen above the tab bar, and the board (<main>) is pinned a
+   set distance up from its bottom. */
+.play-area:not([x-cloak]) {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(
+    100dvh - 6rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+  );
+}
+
+/* Keep each part full width, as it was before the play area was a column
+   (pop-ups set their own size) */
+.play-area > :not(dialog) {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.play-area > main {
+  margin-top: auto;
+  /* Distance from the board's buttons down to the tab bar */
+  margin-bottom: clamp(0.5rem, 40dvh - 15.5rem, 9rem);
+}
+
 /* No blue flash when tapping things on phones, like a real app */
 * {
   -webkit-tap-highlight-color: transparent;
