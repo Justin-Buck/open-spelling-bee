@@ -11,11 +11,14 @@ playScreen: true
 -->
 <loading-indicator x-show="false"></loading-indicator>
 <div class="play-area" x-cloak>
-  <div class="pangramble-bar">
-    <coin-balance></coin-balance>
+  <!-- Everything above the letter board -->
+  <div class="play-top">
+    <div class="pangramble-bar">
+      <coin-balance></coin-balance>
+    </div>
+    <pangramble-timer></pangramble-timer>
+    <p class="pangramble-goal">Find the pangram before time runs out!</p>
   </div>
-  <pangramble-timer></pangramble-timer>
-  <p class="pangramble-goal">Find the pangram before time runs out!</p>
   <!-- No rank bar or guessed-words list here: the goal is just the pangram -->
   <page-main></page-main>
   <pangramble-result-modal></pangramble-result-modal>

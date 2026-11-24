@@ -11,23 +11,26 @@ playScreen: true
 -->
 <loading-indicator x-show="false"></loading-indicator>
 <div class="play-area" x-cloak>
-  <div class="puzzle-bar" x-data>
-    <div class="puzzle-title">
-      <strong x-text="`Puzzle ${$store.game.puzzle?.order ?? ''}`"></strong>
-      <span
-        class="puzzle-difficulty"
-        x-text="$store.game.puzzle?.difficulty"
-      ></span>
+  <!-- Everything above the letter board -->
+  <div class="play-top">
+    <div class="puzzle-bar" x-data>
+      <div class="puzzle-title">
+        <strong x-text="`Puzzle ${$store.game.puzzle?.order ?? ''}`"></strong>
+        <span
+          class="puzzle-difficulty"
+          x-text="$store.game.puzzle?.difficulty"
+        ></span>
+      </div>
     </div>
+    <p class="puzzle-goal" x-data x-show="!$store.game.isPuzzleSolved">
+      Find the pangram to solve this puzzle.
+    </p>
+    <p class="puzzle-goal solved" x-data x-show="$store.game.isPuzzleSolved">
+      Solved! Keep finding words, or try the
+      <a href="/puzzles/">next puzzle</a>.
+    </p>
+    <puzzle-clue-button class="puzzle-clue"></puzzle-clue-button>
   </div>
-  <p class="puzzle-goal" x-data x-show="!$store.game.isPuzzleSolved">
-    Find the pangram to solve this puzzle.
-  </p>
-  <p class="puzzle-goal solved" x-data x-show="$store.game.isPuzzleSolved">
-    Solved! Keep finding words, or try the
-    <a href="/puzzles/">next puzzle</a>.
-  </p>
-  <puzzle-clue-button class="puzzle-clue"></puzzle-clue-button>
   <!-- No rank bar or guessed-words list here: the goal is just the pangram -->
   <page-main></page-main>
   <puzzle-solved-modal></puzzle-solved-modal>

@@ -7,7 +7,9 @@ playScreen: true
 
 <loading-indicator x-show="false"></loading-indicator>
 <div class="play-area" x-cloak>
-  <page-header></page-header>
+  <div class="play-top">
+    <page-header></page-header>
+  </div>
   <page-main></page-main>
 </div>
 

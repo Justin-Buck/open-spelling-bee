@@ -31,28 +31,27 @@ body.play-screen {
 }
 
 /* The letter board sits at the same spot on every play screen (Daily, a
-   puzzle, a Pangramble round), however much is above it. The play area
-   fills the screen above the tab bar, and the board (<main>) is pinned a
-   set distance up from its bottom. */
+   puzzle, a Pangramble round). Everything above the board lives in
+   .play-top, which is the same height on every mode: tall enough for the
+   biggest header (Pangramble's). It's in rem so it grows along with the
+   phone's text-size setting, and it can squeeze a little if the screen
+   runs out of room so the board never gets shoved onto the tabs. */
 .play-area:not([x-cloak]) {
   display: flex;
   flex-direction: column;
-  min-height: calc(
-    100dvh - 6rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)
-  );
+  height: calc(100dvh - 6rem - env(safe-area-inset-top) - env(safe-area-inset-bottom));
 }
-
-/* Keep each part full width, as it was before the play area was a column
-   (pop-ups set their own size) */
-.play-area > :not(dialog) {
+.play-area > * {
   width: 100%;
   box-sizing: border-box;
 }
-
+.play-top {
+  flex: 0 1 8rem;
+  min-height: 8rem;
+  overflow: hidden;
+}
 .play-area > main {
-  margin-top: auto;
-  /* Distance from the board's buttons down to the tab bar */
-  margin-bottom: clamp(0.5rem, 40dvh - 15.5rem, 9rem);
+  flex: none;
 }
 
 /* No blue flash when tapping things on phones, like a real app */

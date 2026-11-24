@@ -57,7 +57,10 @@
     display: block;
     position: relative;
     /* Fits the width, and on short phones the height too */
-    --button-wrapper-size: min(60vw, 32dvh);
+    /* The board's size: 60% of the width, at most about a third of the
+       height, and smaller still if the screen is short on room once the
+       header, guess, and buttons (which grow with text size) are in. */
+    --button-wrapper-size: min(60vw, 32dvh, max(42vw, 94dvh - 29rem));
     --button-wrapper-max-size: 20rem;
     width: var(--button-wrapper-size);
     max-width: var(--button-wrapper-max-size);
