@@ -48,7 +48,6 @@ body.play-screen {
 .play-top {
   flex: 0 1 8rem;
   min-height: 8rem;
-  overflow: hidden;
 }
 .play-area > main {
   flex: none;
